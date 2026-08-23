@@ -15,7 +15,7 @@ export default function DarkToLight() {
           whileInView={{ height: 120 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          className="w-[1px] bg-[#D4AF37] mb-8"
+          className="w-[1px] bg-[#C41E3A] mb-8"
         />
       )}
 

@@ -64,13 +64,13 @@ export default function Services() {
         
         {/* Header Block */}
         <div className="space-y-4 mb-16 md:mb-24 text-left max-w-3xl">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
             Capabilities
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-white uppercase leading-tight">
             Three capabilities. One responsible partner.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mt-4" />
         </div>
 
         {/* Desktop View: Expanding Panels Layout */}
@@ -82,9 +82,9 @@ export default function Services() {
               <button
                 key={idx}
                 onClick={() => setActiveIndex(idx)}
-                className={`relative overflow-hidden rounded-2xl border transition-all duration-500 text-left flex flex-col justify-between p-8 focus:outline-none focus:ring-1 focus:ring-[#D4AF37] cursor-pointer ${
+                className={`relative overflow-hidden rounded-2xl border transition-all duration-500 text-left flex flex-col justify-between p-8 focus:outline-none focus:ring-1 focus:ring-[#C41E3A] cursor-pointer ${
                   isActive
-                    ? "flex-[3.5] bg-[#0c223d] border-[#D4AF37]/50 shadow-xl"
+                    ? "flex-[3.5] bg-[#0c223d] border-[#C41E3A]/50 shadow-xl"
                     : "flex-[1] bg-[#0c1f36] border-white/5 opacity-70 hover:opacity-100 hover:border-white/10"
                 }`}
                 aria-expanded={isActive}
@@ -107,12 +107,12 @@ export default function Services() {
                 {/* Header elements */}
                 <div className="relative z-10 flex items-start justify-between w-full">
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-colors ${
-                    isActive ? "bg-[#D4AF37]/10 border-[#D4AF37]/35 text-[#D4AF37]" : "bg-white/5 border-white/5 text-gray-400"
+                    isActive ? "bg-[#C41E3A]/10 border-[#C41E3A]/35 text-[#C41E3A]" : "bg-white/5 border-white/5 text-gray-400"
                   }`}>
                     <Icon className="w-5 h-5" />
                   </div>
                   {!isActive && (
-                    <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold rotate-90 origin-right translate-y-6">
+                    <span className="text-[10px] uppercase tracking-widest text-[#C41E3A] font-semibold rotate-90 origin-right translate-y-6">
                       {item.shortTitle}
                     </span>
                   )}
@@ -139,7 +139,7 @@ export default function Services() {
                       <div className="grid grid-cols-2 gap-3 pt-2">
                         {item.features.map((feature, fIdx) => (
                           <div key={fIdx} className="flex items-center gap-2">
-                            <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                            <span className="w-1 h-1 rounded-full bg-[#C41E3A]" />
                             <span className="text-[10px] text-gray-400 uppercase tracking-wider">
                               {feature}
                             </span>
@@ -154,11 +154,11 @@ export default function Services() {
                           onClick={(e) => e.stopPropagation()}
                           className="group/btn inline-flex flex-col items-start py-1 text-xs font-bold tracking-wider text-white uppercase"
                         >
-                          <div className="flex items-center gap-1.5 group-hover/btn:text-[#D4AF37] transition-colors duration-300">
+                          <div className="flex items-center gap-1.5 group-hover/btn:text-[#C41E3A] transition-colors duration-300">
                             <span>Explore {item.shortTitle}</span>
                             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
                           </div>
-                          <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover/btn:bg-[#D4AF37]" />
+                          <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover/btn:bg-[#C41E3A]" />
                         </Link>
                       </div>
                     </motion.div>
@@ -178,7 +178,7 @@ export default function Services() {
               <div
                 key={idx}
                 className={`rounded-xl border transition-all duration-300 overflow-hidden ${
-                  isOpen ? "bg-[#0c223d] border-[#D4AF37]/30 shadow-lg" : "bg-[#0c1f36] border-white/5"
+                  isOpen ? "bg-[#0c223d] border-[#C41E3A]/30 shadow-lg" : "bg-[#0c1f36] border-white/5"
                 }`}
               >
                 <button
@@ -188,7 +188,7 @@ export default function Services() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`w-10 h-10 rounded flex items-center justify-center border ${
-                      isOpen ? "bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#D4AF37]" : "bg-white/5 border-white/5 text-gray-400"
+                      isOpen ? "bg-[#C41E3A]/10 border-[#C41E3A]/30 text-[#C41E3A]" : "bg-white/5 border-white/5 text-gray-400"
                     }`}>
                       <Icon className="w-4.5 h-4.5" />
                     </div>
@@ -218,7 +218,7 @@ export default function Services() {
                         <div className="space-y-2 border-t border-white/5 pt-4">
                           {item.features.map((feature, fIdx) => (
                             <div key={fIdx} className="flex items-center gap-2">
-                              <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                              <span className="w-1 h-1 rounded-full bg-[#C41E3A]" />
                               <span className="text-[10px] text-gray-400 uppercase tracking-widest leading-relaxed">
                                 {feature}
                               </span>

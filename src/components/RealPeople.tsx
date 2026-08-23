@@ -28,7 +28,7 @@ export default function RealPeople() {
             Real People. <br className="xs:hidden" />
             Real Responsibility.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
         </div>
 
         {/* Editorial Overlapping Image Composition */}

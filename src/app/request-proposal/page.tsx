@@ -124,7 +124,7 @@ export default function RequestProposalPage() {
         {/* Banner Hero */}
         <section className="py-16 bg-[#081B33] text-white">
           <div className="max-w-4xl mx-auto px-6 space-y-4 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#C41E3A]">
               Proposal Portal
             </span>
             <h1 className="text-2xl sm:text-4xl font-bold font-display uppercase tracking-wider">
@@ -143,7 +143,7 @@ export default function RequestProposalPage() {
             {/* Top Progress Bar */}
             <div className="w-full bg-gray-50 h-2 relative">
               <div
-                className="bg-[#D4AF37] h-full transition-all duration-300"
+                className="bg-[#C41E3A] h-full transition-all duration-300"
                 style={{ width: `${percentComplete}%` }}
               />
             </div>
@@ -379,7 +379,7 @@ export default function RequestProposalPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-3 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] rounded text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      className="px-6 py-3 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] rounded text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <>

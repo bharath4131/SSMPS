@@ -72,7 +72,7 @@ export default function Industries() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-[#081B33] uppercase">
             Sectors We Support
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
         </div>
 
         {/* Sectors Interactive Grid */}
@@ -85,10 +85,10 @@ export default function Industries() {
               <button
                 key={idx}
                 onClick={() => setActiveIdx(isExpanded ? null : idx)}
-                className={`relative rounded-2xl overflow-hidden shadow-sm transition-all duration-500 text-left border flex flex-col justify-end p-6 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#D4AF37] ${
+                className={`relative rounded-2xl overflow-hidden shadow-sm transition-all duration-500 text-left border flex flex-col justify-end p-6 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C41E3A] ${
                   isExpanded 
-                    ? "h-96 border-[#D4AF37]/50 lg:col-span-2" 
-                    : "h-72 border-[#081B33]/5 hover:border-[#D4AF37]/35"
+                    ? "h-96 border-[#C41E3A]/50 lg:col-span-2" 
+                    : "h-72 border-[#081B33]/5 hover:border-[#C41E3A]/35"
                 }`}
               >
                 {/* Image Backdrop */}
@@ -107,11 +107,11 @@ export default function Industries() {
                 {/* Content */}
                 <div className="relative z-20 space-y-3 w-full">
                   <div className="flex justify-between items-center">
-                    <div className="w-10 h-10 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] border border-[#D4AF37]/25">
+                    <div className="w-10 h-10 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] border border-[#C41E3A]/25">
                       <Icon className="w-5 h-5" />
                     </div>
                     <ArrowUpRight className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                      isExpanded ? "rotate-45 text-[#D4AF37]" : ""
+                      isExpanded ? "rotate-45 text-[#C41E3A]" : ""
                     }`} />
                   </div>
 

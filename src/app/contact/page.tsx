@@ -108,14 +108,14 @@ export default function ContactPage() {
         {/* Banner Hero */}
         <section className="py-24 bg-[#081B33] text-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-6 pt-12 text-center">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
               Contact Center
             </span>
             <h1 className="text-3xl sm:text-5xl font-bold font-display tracking-tight uppercase max-w-4xl mx-auto">
               Let's Talk About <br className="hidden sm:inline" />
               Your Requirements.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
           </div>
         </section>
 
@@ -133,7 +133,7 @@ export default function ContactPage() {
                   
                   <div className="space-y-4">
                     <div className="flex gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-gray-100">
-                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#C41E3A] flex items-center justify-center flex-shrink-0">
                         <MapPin className="w-4.5 h-4.5" />
                       </div>
                       <div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="flex gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-gray-100">
-                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#C41E3A] flex items-center justify-center flex-shrink-0">
                         <Phone className="w-4.5 h-4.5" />
                       </div>
                       <div>
@@ -155,7 +155,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="flex gap-4 p-4 rounded-xl bg-[#F7F9FC] border border-gray-100">
-                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
+                      <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#C41E3A] flex items-center justify-center flex-shrink-0">
                         <Mail className="w-4.5 h-4.5" />
                       </div>
                       <div>

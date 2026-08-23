@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Shield, ShieldCheck, Building, Factory, Home, Hospital, School, Loader2, CheckCircle2, AlertCircle, Plus, Minus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -23,6 +23,8 @@ export default function SecurityServicePage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeEnvIdx, setActiveEnvIdx] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
   const {
     register,
@@ -156,15 +158,15 @@ export default function SecurityServicePage() {
         <section className="relative py-24 md:py-32 overflow-hidden border-b border-white/5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,95,0.25)_0%,#081B33_90%)] z-0" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center space-y-6">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#D4AF37]/20 bg-[#D4AF37]/5 text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest">
-              <Shield className="w-4 h-4 text-[#D4AF37]" />
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C41E3A]/20 bg-[#C41E3A]/5 text-[#C41E3A] text-[10px] font-bold uppercase tracking-widest">
+              <Shield className="w-4 h-4 text-[#C41E3A]" />
               <span>Security Operations Division</span>
             </span>
             <h1 className="text-4xl md:text-6xl font-extrabold font-display tracking-tight text-white leading-tight uppercase">
               Security That <br />
               Supports Confidence.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto" />
             <p className="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
               We deploy disciplined, trained personnel to safeguard properties, manage visitor audits, and maintain operational stability.
             </p>
@@ -175,37 +177,69 @@ export default function SecurityServicePage() {
         <section className="py-24 bg-[#081B33] border-b border-white/5">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
                 Offerings
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-white uppercase">
                 Guarding Capabilities
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Environment Explorer Switcher */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-white/5 pb-4 mb-8">
               {securityServicesList.map((srv, idx) => {
                 const Icon = srv.icon;
+                const isActive = activeEnvIdx === idx;
                 return (
-                  <div
+                  <button
                     key={idx}
-                    className="p-8 rounded-2xl border border-white/5 bg-[#1E3A5F]/10 flex flex-col justify-between min-h-[220px]"
+                    onClick={() => setActiveEnvIdx(idx)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C41E3A] ${
+                      isActive 
+                        ? "bg-[#1E3A5F]/20 border-[#C41E3A] text-white" 
+                        : "bg-[#1E3A5F]/5 border-white/5 text-gray-400 hover:text-white hover:border-white/10"
+                    }`}
                   >
-                    <div className="space-y-4">
-                      <div className="w-10 h-10 rounded bg-[#D4AF37]/10 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-5 h-5 stroke-[1.5]" />
-                      </div>
-                      <h3 className="text-base font-bold font-display text-white uppercase tracking-wider">
-                        {srv.title}
-                      </h3>
-                      <p className="text-xs text-gray-400 font-light leading-relaxed">
-                        {srv.desc}
-                      </p>
-                    </div>
-                  </div>
+                    <Icon className="w-5 h-5 mb-2 stroke-[1.5]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest font-display">
+                      {srv.title.replace(" Support", "")}
+                    </span>
+                  </button>
                 );
               })}
+            </div>
+
+            {/* Active Environment Display Card */}
+            <div className="bg-[#1E3A5F]/10 border border-white/5 rounded-2xl p-8 min-h-[180px] relative overflow-hidden">
+              <div className="absolute -right-6 -bottom-10 text-[100px] opacity-[0.02] pointer-events-none select-none font-bold">
+                {activeEnvIdx + 1}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeEnvIdx}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded bg-[#C41E3A]/10 text-[#C41E3A] flex items-center justify-center">
+                      {(() => {
+                        const EnvIcon = securityServicesList[activeEnvIdx].icon;
+                        return <EnvIcon className="w-4 h-4" />;
+                      })()}
+                    </div>
+                    <h3 className="text-lg font-bold font-display text-white uppercase tracking-wider">
+                      {securityServicesList[activeEnvIdx].title}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-300 font-light leading-relaxed max-w-2xl">
+                    {securityServicesList[activeEnvIdx].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -214,19 +248,19 @@ export default function SecurityServicePage() {
         <section className="py-24 bg-[#0c223d] border-b border-white/5">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
                 Implementation
               </span>
               <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-white uppercase">
                 Onboarding Framework
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {securityProcess.map((step, idx) => (
                 <div key={idx} className="bg-[#081B33] p-6 rounded-2xl border border-white/5 relative space-y-4">
-                  <div className="absolute top-4 right-4 text-3xl font-extrabold text-[#D4AF37]/10">
+                  <div className="absolute top-4 right-4 text-3xl font-extrabold text-[#C41E3A]/10">
                     0{idx + 1}
                   </div>
                   <h3 className="text-sm font-bold font-display text-white uppercase tracking-wider pr-8">
@@ -248,7 +282,7 @@ export default function SecurityServicePage() {
             {/* Info Column */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
               <div className="space-y-6">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#C41E3A]">
                   Inquiry Center
                 </span>
                 <h2 className="text-3xl font-bold font-display tracking-tight text-white uppercase leading-none">
@@ -307,7 +341,7 @@ export default function SecurityServicePage() {
                       type="text"
                       aria-invalid={errors.organization ? "true" : "false"}
                       {...register("organization", { required: "Organization is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="Company"
                     />
                     {errors.organization && <p className="text-[10px] text-red-400 mt-1">{errors.organization.message}</p>}
@@ -319,7 +353,7 @@ export default function SecurityServicePage() {
                       type="text"
                       aria-invalid={errors.contactName ? "true" : "false"}
                       {...register("contactName", { required: "Contact name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="Name"
                     />
                     {errors.contactName && <p className="text-[10px] text-red-400 mt-1">{errors.contactName.message}</p>}
@@ -334,7 +368,7 @@ export default function SecurityServicePage() {
                       type="email"
                       aria-invalid={errors.email ? "true" : "false"}
                       {...register("email", { required: "Email is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="name@company.com"
                     />
                     {errors.email && <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>}
@@ -346,7 +380,7 @@ export default function SecurityServicePage() {
                       type="tel"
                       aria-invalid={errors.phone ? "true" : "false"}
                       {...register("phone", { required: "Phone is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="e.g. 9002570891"
                     />
                     {errors.phone && <p className="text-[10px] text-red-400 mt-1">{errors.phone.message}</p>}
@@ -359,7 +393,7 @@ export default function SecurityServicePage() {
                     <select
                       id="guardCount"
                       {...register("guardCount")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                     >
                       <option value="1-5">1 - 5 Guards</option>
                       <option value="6-15">6 - 15 Guards</option>
@@ -372,7 +406,7 @@ export default function SecurityServicePage() {
                     <select
                       id="shifts"
                       {...register("shifts")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                     >
                       <option value="Single (12h)">Single Shift (12h)</option>
                       <option value="Double (8h+8h)">Double Shift (8h x 2)</option>
@@ -388,14 +422,14 @@ export default function SecurityServicePage() {
                     rows={3}
                     placeholder="Briefly describe your site, check-in lobby setup, or specific post rules..."
                     {...register("notes")}
-                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
+                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#C41E3A] text-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -415,13 +449,13 @@ export default function SecurityServicePage() {
         <section className="py-24 bg-[#0c223d] text-white">
           <div className="max-w-3xl mx-auto px-6 md:px-8">
             <div className="text-center space-y-4 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
                 FAQ
               </span>
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-white uppercase">
                 Common Questions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
             <div className="space-y-4">
@@ -434,7 +468,7 @@ export default function SecurityServicePage() {
                       className="w-full py-5 px-6 md:px-8 flex items-center justify-between text-left hover:bg-white/5 transition-colors cursor-pointer"
                     >
                       <span className="text-sm md:text-base font-bold font-display text-white uppercase tracking-wider">{faq.q}</span>
-                      <div className={`w-8 h-8 rounded bg-white/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#D4AF37] text-[#081B33]" : ""}`}>
+                      <div className={`w-8 h-8 rounded bg-white/5 text-[#C41E3A] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#C41E3A] text-[#081B33]" : ""}`}>
                         {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                       </div>
                     </button>

@@ -36,13 +36,13 @@ export default function Responsibility() {
         >
           {/* Main Statement */}
           <div className="space-y-4">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
               Core Purpose
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.1] uppercase max-w-4xl">
               Every organization has something worth protecting.
             </h2>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mt-6" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mt-6" />
           </div>
 
           {/* Detailed Narrative */}
@@ -62,7 +62,7 @@ export default function Responsibility() {
           {/* Highlights Checklist */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-10 border-t border-white/5">
             {categories.map((cat, index) => (
-              <div key={index} className="space-y-2 border-l border-[#D4AF37]/30 pl-4">
+              <div key={index} className="space-y-2 border-l border-[#C41E3A]/30 pl-4">
                 <h4 className="text-xs font-bold text-white uppercase tracking-widest font-display">
                   {cat.title}
                 </h4>

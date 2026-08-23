@@ -15,17 +15,17 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-10 h-10 flex-shrink-0 transition-transform duration-300">
                 <Image
-                  src="/logo.png"
+                  src="/logo-transparent.png"
                   alt="SSMPS Logo"
                   fill
                   className="object-contain"
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold font-display tracking-wider text-white group-hover:text-[#D4AF37] transition-colors duration-300 uppercase">
+                <span className="text-lg font-bold font-display tracking-wider text-white group-hover:text-[#C41E3A] transition-colors duration-300 uppercase">
                   SSMPS
                 </span>
-                <span className="text-[8px] font-medium tracking-[0.25em] text-[#D4AF37] uppercase -mt-1.5">
+                <span className="text-[8px] font-medium tracking-[0.25em] text-[#C41E3A] uppercase -mt-1.5">
                   Manpower solutions
                 </span>
               </div>
@@ -53,7 +53,7 @@ export default function Footer() {
                 { name: "Request a Proposal", href: "/request-proposal" },
               ].map((link, idx) => (
                 <li key={idx}>
-                  <Link href={link.href} className="hover:text-[#D4AF37] transition-colors">
+                  <Link href={link.href} className="hover:text-[#C41E3A] transition-colors">
                     {link.name}
                   </Link>
                 </li>
@@ -90,15 +90,15 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3 text-xs">
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
+                <Phone className="w-4 h-4 text-[#C41E3A] flex-shrink-0" />
                 <a href="tel:9002570891" className="hover:text-white">9002570891</a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
+                <Mail className="w-4 h-4 text-[#C41E3A] flex-shrink-0" />
                 <a href="mailto:ssmps1991@gmail.com" className="hover:text-white">ssmps1991@gmail.com</a>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#C41E3A] flex-shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
                   Above raja medical, Beside saidabad bustand, madannapet mandi, Hyderabad, Telangana.
                 </span>
@@ -106,7 +106,7 @@ export default function Footer() {
               <li className="border-t border-white/5 pt-2 mt-2">
                 <span className="text-[10px] uppercase tracking-wider text-gray-500 block">Active Presence</span>
                 <span className="text-[10px] text-gray-300 font-semibold mt-1 block">Telangana &amp; Andhra Pradesh</span>
-                <span className="text-[9px] text-[#D4AF37] font-light mt-0.5 block">Expanding across Southern India</span>
+                <span className="text-[9px] text-[#C41E3A] font-light mt-0.5 block">Expanding across Southern India</span>
               </li>
             </ul>
           </div>

@@ -55,7 +55,7 @@ export default function Stats() {
             Built to serve. <br />
             Growing with responsibility.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
         </div>
 
         {/* Typographic Metrics Grid */}
@@ -73,7 +73,7 @@ export default function Stats() {
                 className="p-6 rounded-2xl border border-gray-100 bg-[#F7F9FC] shadow-sm flex flex-col justify-between min-h-[220px]"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded bg-[#081B33]/5 flex items-center justify-center text-[#D4AF37]">
+                  <div className="w-9 h-9 rounded bg-[#081B33]/5 flex items-center justify-center text-[#C41E3A]">
                     <Icon className="w-4.5 h-4.5" />
                   </div>
                   <span className="text-[9px] uppercase tracking-widest text-gray-400 font-bold">

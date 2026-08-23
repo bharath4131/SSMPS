@@ -104,20 +104,20 @@ export default function Contact() {
     <section id="contact" className="py-24 md:py-36 bg-[#081B33] text-white relative">
       {/* Background ambient decoration */}
       <div className="absolute top-1/4 left-10 w-96 h-96 bg-[#1E3A5F]/15 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-10 right-1/4 w-[500px] h-[500px] bg-[#D4AF37]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-10 right-1/4 w-[500px] h-[500px] bg-[#C41E3A]/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         
         {/* Header Block */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 md:mb-24">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
             Partner With Us
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-white uppercase leading-none">
             What can we help your <br className="hidden sm:inline" />
             organization with?
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
@@ -132,9 +132,9 @@ export default function Contact() {
               <div className="space-y-4">
                 <a
                   href="tel:9002570891"
-                  className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#D4AF37]/20 transition-all duration-300"
+                  className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#C41E3A]/20 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+                  <div className="w-10 h-10 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
                     <Phone className="w-4.5 h-4.5" />
                   </div>
                   <div>
@@ -145,9 +145,9 @@ export default function Contact() {
 
                 <a
                   href="mailto:ssmps1991@gmail.com"
-                  className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#D4AF37]/20 transition-all duration-300"
+                  className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#C41E3A]/20 transition-all duration-300"
                 >
-                  <div className="w-10 h-10 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+                  <div className="w-10 h-10 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
                     <Mail className="w-4.5 h-4.5" />
                   </div>
                   <div>
@@ -157,7 +157,7 @@ export default function Contact() {
                 </a>
 
                 <div className="flex items-start gap-4 p-4 rounded-xl border border-white/5 bg-[#1E3A5F]/10">
-                  <div className="w-10 h-10 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+                  <div className="w-10 h-10 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
                     <MapPin className="w-4.5 h-4.5" />
                   </div>
                   <div>
@@ -197,7 +197,7 @@ export default function Contact() {
                       onClick={() => setSelectedService(opt.value)}
                       className={`px-3.5 py-2 text-[10px] font-bold uppercase tracking-wider rounded border transition-all cursor-pointer ${
                         selectedService === opt.value
-                          ? "bg-[#D4AF37] border-[#D4AF37] text-[#081B33]"
+                          ? "bg-[#C41E3A] border-[#C41E3A] text-[#081B33]"
                           : "border-white/10 text-gray-300 hover:border-white/30 bg-white/5"
                       }`}
                     >
@@ -259,7 +259,7 @@ export default function Contact() {
                       aria-invalid={errors.name ? "true" : "false"}
                       {...register("name", { required: "Name is required" })}
                       className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors ${
-                        errors.name ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                        errors.name ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                       }`}
                       placeholder="Contact Name"
                     />
@@ -279,7 +279,7 @@ export default function Contact() {
                       aria-invalid={errors.organization ? "true" : "false"}
                       {...register("organization", { required: "Organization is required" })}
                       className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors ${
-                        errors.organization ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                        errors.organization ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                       }`}
                       placeholder="Company Name"
                     />
@@ -307,7 +307,7 @@ export default function Contact() {
                         },
                       })}
                       className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors ${
-                        errors.phone ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                        errors.phone ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                       }`}
                       placeholder="e.g. 9002570891"
                     />
@@ -333,7 +333,7 @@ export default function Contact() {
                         },
                       })}
                       className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors ${
-                        errors.email ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                        errors.email ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                       }`}
                       placeholder="email@organization.com"
                     />
@@ -354,7 +354,7 @@ export default function Contact() {
                     aria-invalid={errors.location ? "true" : "false"}
                     {...register("location", { required: "Location is required" })}
                     className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors ${
-                      errors.location ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                      errors.location ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                     }`}
                     placeholder="e.g. Madhapur, Hyderabad or Visakhapatnam"
                   />
@@ -374,7 +374,7 @@ export default function Contact() {
                     aria-invalid={errors.requirement ? "true" : "false"}
                     {...register("requirement", { required: "Requirement description is required" })}
                     className={`w-full bg-white/5 border rounded px-3 py-2.5 text-xs text-white focus:outline-none transition-colors resize-none ${
-                      errors.requirement ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#D4AF37]"
+                      errors.requirement ? "border-red-500 focus:border-red-500" : "border-white/10 focus:border-[#C41E3A]"
                     }`}
                     placeholder="Roster frequencies, guard shift timings, or cleaning area square footage"
                   />
@@ -387,7 +387,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>

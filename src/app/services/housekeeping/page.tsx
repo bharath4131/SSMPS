@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Sparkles, Briefcase, Building, Layers, Brush, Wrench, Bath, Loader2, CheckCircle2, AlertCircle, Plus, Minus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -24,6 +24,8 @@ export default function HousekeepingServicePage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeNeedIdx, setActiveNeedIdx] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
   const {
     register,
@@ -151,7 +153,7 @@ export default function HousekeepingServicePage() {
         
         {/* Service Hero Banner */}
         <section className="relative py-24 md:py-32 overflow-hidden bg-[#F7F9FC] border-b border-[#081B33]/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,#F7F9FC_90%)] z-0" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(196,30,58,0.05)_0%,#F7F9FC_90%)] z-0" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center space-y-6">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C41E3A]/20 bg-[#C41E3A]/5 text-[#C41E3A] text-[10px] font-bold uppercase tracking-widest">
               <Sparkles className="w-4 h-4 text-[#C41E3A]" />
@@ -161,7 +163,7 @@ export default function HousekeepingServicePage() {
               Clean Environments. <br />
               Consistent Standards.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto" />
             <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
               We deploy trained housekeeping executives, certified cleaning supplies, and detailed checklists to maintain hygienic B2B spaces.
             </p>
@@ -178,31 +180,63 @@ export default function HousekeepingServicePage() {
               <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
                 Hygiene Solutions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Environment & Service Needs Explorer */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 border-b border-gray-100 pb-4 mb-8">
               {housekeepingServicesList.map((srv, idx) => {
                 const Icon = srv.icon;
+                const isActive = activeNeedIdx === idx;
                 return (
-                  <div
+                  <button
                     key={idx}
-                    className="p-8 rounded-2xl border border-gray-100 bg-[#F7F9FC] flex flex-col justify-between min-h-[220px]"
+                    onClick={() => setActiveNeedIdx(idx)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C41E3A] ${
+                      isActive 
+                        ? "bg-[#081B33] text-white border-transparent shadow-md" 
+                        : "bg-[#F8FAFC] border-gray-100 text-gray-500 hover:text-[#081B33] hover:border-gray-200"
+                    }`}
                   >
-                    <div className="space-y-4">
-                      <div className="w-10 h-10 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-5 h-5 stroke-[1.5]" />
-                      </div>
-                      <h3 className="text-base font-bold font-display text-[#081B33] uppercase tracking-wider">
-                        {srv.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 font-light leading-relaxed">
-                        {srv.desc}
-                      </p>
-                    </div>
-                  </div>
+                    <Icon className="w-5 h-5 mb-2 stroke-[1.5]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest font-display">
+                      {srv.title.replace(" Care", "").replace(" Upkeep", "").replace(" Maintenance", "")}
+                    </span>
+                  </button>
                 );
               })}
+            </div>
+
+            {/* Active Need Card */}
+            <div className="bg-[#F8FAFC] border border-gray-100 rounded-2xl p-8 min-h-[180px] relative overflow-hidden shadow-sm">
+              <div className="absolute -right-6 -bottom-10 text-[100px] opacity-[0.02] pointer-events-none select-none font-bold text-[#081B33]">
+                {activeNeedIdx + 1}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeNeedIdx}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded bg-[#C41E3A]/5 text-[#C41E3A] flex items-center justify-center">
+                      {(() => {
+                        const NeedIcon = housekeepingServicesList[activeNeedIdx].icon;
+                        return <NeedIcon className="w-4 h-4" />;
+                      })()}
+                    </div>
+                    <h3 className="text-lg font-bold font-display text-[#081B33] uppercase tracking-wider">
+                      {housekeepingServicesList[activeNeedIdx].title}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-600 font-light leading-relaxed max-w-2xl">
+                    {housekeepingServicesList[activeNeedIdx].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -217,13 +251,13 @@ export default function HousekeepingServicePage() {
               <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
                 Quality Maintenance Loop
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {housekeepingProcess.map((step, idx) => (
                 <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 relative space-y-4 shadow-sm">
-                  <div className="absolute top-4 right-4 text-3xl font-extrabold text-[#D4AF37]/15">
+                  <div className="absolute top-4 right-4 text-3xl font-extrabold text-[#C41E3A]/15">
                     0{idx + 1}
                   </div>
                   <h3 className="text-sm font-bold font-display text-[#081B33] uppercase tracking-wider pr-8">
@@ -245,7 +279,7 @@ export default function HousekeepingServicePage() {
             {/* Info Column */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
               <div className="space-y-6">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#C41E3A]">
                   Inquiry Desk
                 </span>
                 <h2 className="text-3xl font-bold font-display tracking-tight text-white uppercase leading-none">
@@ -304,7 +338,7 @@ export default function HousekeepingServicePage() {
                       type="text"
                       aria-invalid={errors.organization ? "true" : "false"}
                       {...register("organization", { required: "Organization is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="Company"
                     />
                     {errors.organization && <p className="text-[10px] text-red-400 mt-1">{errors.organization.message}</p>}
@@ -316,7 +350,7 @@ export default function HousekeepingServicePage() {
                       type="text"
                       aria-invalid={errors.contactName ? "true" : "false"}
                       {...register("contactName", { required: "Contact name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="Name"
                     />
                     {errors.contactName && <p className="text-[10px] text-red-400 mt-1">{errors.contactName.message}</p>}
@@ -331,7 +365,7 @@ export default function HousekeepingServicePage() {
                       type="email"
                       aria-invalid={errors.email ? "true" : "false"}
                       {...register("email", { required: "Email is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="name@company.com"
                     />
                     {errors.email && <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>}
@@ -343,7 +377,7 @@ export default function HousekeepingServicePage() {
                       type="tel"
                       aria-invalid={errors.phone ? "true" : "false"}
                       {...register("phone", { required: "Phone is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="e.g. 9002570891"
                     />
                     {errors.phone && <p className="text-[10px] text-red-400 mt-1">{errors.phone.message}</p>}
@@ -357,7 +391,7 @@ export default function HousekeepingServicePage() {
                       id="facilitySize"
                       type="text"
                       {...register("facilitySize", { required: "Size is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#C41E3A]"
                       placeholder="e.g. 15,000 sqft"
                     />
                     {errors.facilitySize && <p className="text-[10px] text-red-400 mt-1">{errors.facilitySize.message}</p>}
@@ -367,7 +401,7 @@ export default function HousekeepingServicePage() {
                     <select
                       id="frequency"
                       {...register("frequency")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                     >
                       <option value="Daily Routine">Daily Routine Cleaning</option>
                       <option value="Alternate Days">Alternate Days</option>
@@ -383,14 +417,14 @@ export default function HousekeepingServicePage() {
                     rows={3}
                     placeholder="Briefly describe floor materials, high-rise facade windows details..."
                     {...register("notes")}
-                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
+                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#C41E3A] text-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -416,7 +450,7 @@ export default function HousekeepingServicePage() {
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-[#081B33] uppercase">
                 Hygiene Questions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
             <div className="space-y-4">
@@ -429,7 +463,7 @@ export default function HousekeepingServicePage() {
                       className="w-full py-5 px-6 md:px-8 flex items-center justify-between text-left hover:bg-gray-50/50 transition-colors cursor-pointer"
                     >
                       <span className="text-sm md:text-base font-bold font-display text-[#081B33] uppercase tracking-wider">{faq.q}</span>
-                      <div className={`w-8 h-8 rounded-lg bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#081B33] text-white" : ""}`}>
+                      <div className={`w-8 h-8 rounded-lg bg-[#081B33]/5 text-[#C41E3A] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#081B33] text-white" : ""}`}>
                         {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                       </div>
                     </button>

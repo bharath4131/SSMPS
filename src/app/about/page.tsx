@@ -1,23 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ShieldCheck, MapPin, Award, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function AboutPage() {
+  const [activeTimelineIdx, setActiveTimelineIdx] = useState(1); // Default to 'Today'
   const shouldReduceMotion = useReducedMotion();
-
-  const fadeUp = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 25 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" as const },
-    },
-  };
 
   const timeline = [
     { year: "2021", label: "Establishment", desc: "SS ManPower Solutions established. Commenced operations in Hyderabad focusing on commercial utility services." },
@@ -29,7 +22,7 @@ export default function AboutPage() {
     <>
       <Navbar />
 
-      <main className="flex-grow bg-[#F7F9FC] text-[#081B33]">
+      <main className="flex-grow bg-[#F8FAFC] text-[#081B33]">
         {/* ACT 1 Hero: Dark Authority */}
         <section className="relative py-28 md:py-40 bg-[#081B33] text-white overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -43,20 +36,20 @@ export default function AboutPage() {
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 space-y-6 pt-12">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
               Service is a Responsibility
             </span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight uppercase max-w-4xl">
               About SSMPS.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37]" />
+            <div className="h-[2px] w-20 bg-[#C41E3A]" />
             <p className="text-xs sm:text-sm text-gray-300 font-light max-w-2xl leading-relaxed">
               We provide the discipline, personnel training, and on-site oversight required to secure assets and manage hygiene standards for corporate and residential organizations.
             </p>
           </div>
         </section>
 
-        {/* ACT 2: Light Editorial Narrative */}
+        {/* ACT 2: Light Editorial Narrative & Timeline Explorer */}
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -74,34 +67,51 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              {/* Right Column: Timeline Chapters */}
+              {/* Right Column: Interactive Timeline Explorer */}
               <div className="lg:col-span-7 space-y-8">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block mb-4">
-                  Operational Timeline
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                  Timeline Explorer
                 </span>
-                <div className="space-y-6 border-l border-gray-100 pl-6 ml-2">
-                  {timeline.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, margin: "-100px" }}
-                      variants={fadeUp}
-                      className="relative space-y-1"
-                    >
-                      {/* Node point */}
-                      <span className="absolute -left-[31px] top-1.5 w-2 h-2 rounded-full bg-[#D4AF37] border-2 border-white" />
-                      <div className="text-lg font-bold font-display text-[#081B33]">
+
+                {/* Switcher Tabs */}
+                <div className="flex gap-4 border-b border-gray-100 pb-2">
+                  {timeline.map((item, idx) => {
+                    const isActive = activeTimelineIdx === idx;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveTimelineIdx(idx)}
+                        className={`pb-2 text-md font-bold uppercase tracking-widest border-b-2 transition-all duration-300 cursor-pointer focus:outline-none ${
+                          isActive 
+                            ? "border-[#C41E3A] text-[#081B33]" 
+                            : "border-transparent text-gray-400 hover:text-[#081B33]"
+                        }`}
+                      >
                         {item.year}
-                      </div>
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Active Details Display */}
+                <div className="min-h-[140px] bg-[#F8FAFC] border border-gray-100 p-6 rounded-2xl relative overflow-hidden">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeTimelineIdx}
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-2"
+                    >
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-[#C41E3A]">
+                        {timeline[activeTimelineIdx].label}
                       </h3>
-                      <p className="text-xs sm:text-sm text-gray-500 font-light leading-relaxed pt-1">
-                        {item.desc}
+                      <p className="text-sm md:text-md text-gray-600 font-light leading-relaxed max-w-xl">
+                        {timeline[activeTimelineIdx].desc}
                       </p>
                     </motion.div>
-                  ))}
+                  </AnimatePresence>
                 </div>
               </div>
 
@@ -110,7 +120,7 @@ export default function AboutPage() {
         </section>
 
         {/* Principles Section */}
-        <section className="py-20 bg-[#F7F9FC]">
+        <section className="py-20 bg-[#F8FAFC]">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="space-y-4 mb-16 text-center max-w-3xl mx-auto">
               <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
@@ -119,7 +129,7 @@ export default function AboutPage() {
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-[#081B33] uppercase">
                 Core Governance Principles
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+              <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -132,7 +142,7 @@ export default function AboutPage() {
                 const Icon = p.icon;
                 return (
                   <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-                    <div className="w-10 h-10 rounded bg-[#081B33]/5 flex items-center justify-center text-[#D4AF37]">
+                    <div className="w-10 h-10 rounded bg-[#C41E3A]/5 flex items-center justify-center text-[#C41E3A]">
                       <Icon className="w-4.5 h-4.5" />
                     </div>
                     <h3 className="text-sm font-bold uppercase tracking-widest font-display text-[#081B33]">
@@ -161,7 +171,7 @@ export default function AboutPage() {
             <div className="pt-4 flex justify-center">
               <Link
                 href="/request-proposal"
-                className="px-6 py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center gap-2 group cursor-pointer"
+                className="px-6 py-4 bg-[#C41E3A] hover:bg-[#A3182E] text-white text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center gap-2 group cursor-pointer"
               >
                 <span>Request a Proposal</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

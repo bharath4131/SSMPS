@@ -1,12 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Building, Factory, Home, Hospital, GraduationCap, BedDouble, Warehouse, ShoppingBag } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function IndustriesPage() {
+  const [activeSecIdx, setActiveSecIdx] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
   const sectors = [
     {
       name: "Corporate",
@@ -67,69 +71,100 @@ export default function IndustriesPage() {
         {/* Banner Hero */}
         <section className="py-24 md:py-36 bg-[#081B33] text-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-6 pt-12 text-center">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
               Deployment Sectors
             </span>
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight uppercase max-w-4xl mx-auto">
               Every Environment Has <br className="hidden sm:inline" />
               Different Requirements.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             <p className="text-xs sm:text-sm text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
               We design specialized checklists, security post orders, and housekeeping frequencies matching the compliance profile of each environment.
             </p>
           </div>
         </section>
 
-        {/* Sectors Grid Catalog */}
+        {/* Sectors Interactive Selector */}
         <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-12">
+            
+            {/* Selector Grid of Buttons */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 border-b border-gray-100 pb-4">
               {sectors.map((sec, idx) => {
                 const Icon = sec.icon;
+                const isActive = activeSecIdx === idx;
                 return (
-                  <div
+                  <button
                     key={idx}
-                    className="group rounded-2xl overflow-hidden border border-gray-100 bg-[#F7F9FC] grid grid-cols-1 sm:grid-cols-12 shadow-sm"
+                    onClick={() => setActiveSecIdx(idx)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C41E3A] ${
+                      isActive 
+                        ? "bg-[#081B33] text-white border-transparent shadow-md" 
+                        : "bg-[#F8FAFC] border-gray-100 text-gray-500 hover:text-[#081B33] hover:border-gray-200"
+                    }`}
                   >
-                    {/* Left Side: Photo */}
-                    <div className="sm:col-span-5 relative min-h-[200px] sm:min-h-full">
-                      <Image
-                        src={sec.image}
-                        alt={`${sec.name} Environment`}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-103"
-                      />
-                    </div>
-
-                    {/* Right Side: Details */}
-                    <div className="sm:col-span-7 p-6 flex flex-col justify-between space-y-4">
-                      <div className="space-y-3">
-                        <div className="w-9 h-9 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center border border-[#081B33]/5">
-                          <Icon className="w-4.5 h-4.5" />
-                        </div>
-                        <h3 className="text-sm font-bold font-display uppercase tracking-wider text-[#081B33]">
-                          {sec.name} Sector
-                        </h3>
-                        <p className="text-xs text-gray-500 font-light leading-relaxed">
-                          {sec.desc}
-                        </p>
-                      </div>
-                      
-                      <div className="pt-2">
-                        <Link
-                          href="/request-proposal"
-                          className="group/btn inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#081B33] hover:text-[#C41E3A] transition-colors"
-                        >
-                          <span>Request Bid</span>
-                          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                    <Icon className="w-5 h-5 mb-2 stroke-[1.5]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest font-display">
+                      {sec.name}
+                    </span>
+                  </button>
                 );
               })}
             </div>
+
+            {/* Active Sector Display Card */}
+            <div className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm bg-[#F8FAFC]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSecIdx}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid grid-cols-1 lg:grid-cols-12 min-h-[350px]"
+                >
+                  {/* Left Side: Photo */}
+                  <div className="lg:col-span-5 relative min-h-[220px] lg:min-h-full">
+                    <Image
+                      src={sectors[activeSecIdx].image}
+                      alt={`${sectors[activeSecIdx].name} Environment`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
+                  {/* Right Side: Details */}
+                  <div className="lg:col-span-7 p-8 flex flex-col justify-between space-y-6">
+                    <div className="space-y-4">
+                      <div className="w-10 h-10 rounded bg-[#C41E3A]/5 text-[#C41E3A] flex items-center justify-center">
+                        {(() => {
+                          const SecIcon = sectors[activeSecIdx].icon;
+                          return <SecIcon className="w-5 h-5" />;
+                        })()}
+                      </div>
+                      <h3 className="text-xl font-bold font-display uppercase tracking-wider text-[#081B33]">
+                        {sectors[activeSecIdx].name} Environments
+                      </h3>
+                      <p className="text-sm text-gray-600 font-light leading-relaxed max-w-xl">
+                        {sectors[activeSecIdx].desc}
+                      </p>
+                    </div>
+                    
+                    <div className="pt-2">
+                      <Link
+                        href="/request-proposal"
+                        className="group/btn inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#081B33] hover:text-[#C41E3A] transition-colors"
+                      >
+                        <span>Request a Service Proposal</span>
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
           </div>
         </section>
 

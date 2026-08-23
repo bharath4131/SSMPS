@@ -144,7 +144,7 @@ export async function POST(request: Request) {
       subject: `SSMPS Corporate Proposal Inquiry: ${cleanService}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
-          <h2 style="color: #081B33; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; text-transform: uppercase;">New SSMPS Proposal Request</h2>
+          <h2 style="color: #081B33; border-bottom: 2px solid #C41E3A; padding-bottom: 10px; text-transform: uppercase;">New SSMPS Proposal Request</h2>
           <p>A new B2B inquiry was submitted through the SSMPS portal:</p>
           <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
             <tr>
@@ -173,7 +173,7 @@ export async function POST(request: Request) {
             </tr>
           </table>
           
-          <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #D4AF37;">
+          <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #C41E3A;">
             <strong style="color: #081B33; display: block; margin-bottom: 5px;">Requirements / Notes:</strong>
             <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #555; white-space: pre-wrap;">${cleanMessage || "No detailed notes provided."}</p>
           </div>

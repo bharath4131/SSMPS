@@ -67,9 +67,9 @@ export default function Hero({ onOpenQuote }: HeroProps) {
               initial="hidden"
               animate="visible"
               variants={fadeUpVariants}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#D4AF37]/20 bg-[#D4AF37]/5 text-[#D4AF37] text-[10px] font-bold uppercase tracking-widest"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C41E3A]/20 bg-[#C41E3A]/5 text-[#C41E3A] text-[10px] font-bold uppercase tracking-widest"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C41E3A] animate-ping" />
               YOU TRUST. WE SERVE.
             </motion.div>
 
@@ -111,7 +111,7 @@ export default function Hero({ onOpenQuote }: HeroProps) {
             >
               <Link
                 href="/request-proposal"
-                className="px-6 py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 group cursor-pointer"
+                className="px-6 py-4 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Request a Proposal</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -138,7 +138,7 @@ export default function Hero({ onOpenQuote }: HeroProps) {
         >
           {/* Est 2021 */}
           <div className="flex gap-4 items-start">
-            <div className="w-8 h-8 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+            <div className="w-8 h-8 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
               <ShieldCheck className="w-4.5 h-4.5" />
             </div>
             <div>
@@ -149,7 +149,7 @@ export default function Hero({ onOpenQuote }: HeroProps) {
 
           {/* Active Presence */}
           <div className="flex gap-4 items-start">
-            <div className="w-8 h-8 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+            <div className="w-8 h-8 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
               <MapPin className="w-4.5 h-4.5" />
             </div>
             <div>
@@ -160,7 +160,7 @@ export default function Hero({ onOpenQuote }: HeroProps) {
 
           {/* Growth */}
           <div className="flex gap-4 items-start">
-            <div className="w-8 h-8 rounded bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] flex-shrink-0">
+            <div className="w-8 h-8 rounded bg-[#C41E3A]/10 flex items-center justify-center text-[#C41E3A] flex-shrink-0">
               <TrendingUp className="w-4.5 h-4.5" />
             </div>
             <div>

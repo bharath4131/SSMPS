@@ -101,9 +101,9 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
             className="relative w-full max-w-3xl overflow-hidden glass-card-gold text-white rounded-2xl shadow-2xl z-10 grid grid-cols-1 md:grid-cols-12 min-h-[500px]"
           >
             {/* Sidebar Branding & Info */}
-            <div className="md:col-span-4 bg-gradient-to-b from-[#081B33] to-[#1E3A5F] p-8 flex flex-col justify-between border-r border-[#D4AF37]/15">
+            <div className="md:col-span-4 bg-gradient-to-b from-[#081B33] to-[#1E3A5F] p-8 flex flex-col justify-between border-r border-[#C41E3A]/15">
               <div>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-semibold">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#C41E3A] font-semibold">
                   Corporate Portal
                 </span>
                 <h3 className="text-xl font-bold font-display mt-2 mb-4">
@@ -116,15 +116,15 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
 
               <div className="space-y-4 my-8 md:my-0">
                 <div className="flex items-center gap-3 text-xs text-gray-300">
-                  <Phone className="w-4 h-4 text-[#D4AF37]" />
+                  <Phone className="w-4 h-4 text-[#C41E3A]" />
                   <span>+91 9002570891</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-gray-300">
-                  <Mail className="w-4 h-4 text-[#D4AF37]" />
+                  <Mail className="w-4 h-4 text-[#C41E3A]" />
                   <span>ssmps1991@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-gray-300">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-[#C41E3A] flex-shrink-0" />
                   <span className="leading-tight">Saidabad, Hyderabad</span>
                 </div>
               </div>
@@ -154,7 +154,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                         <div
                           className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                             step >= s
-                              ? "bg-[#D4AF37] text-[#081B33] shadow-md shadow-[#D4AF37]/25"
+                              ? "bg-[#C41E3A] text-[#081B33] shadow-md shadow-[#C41E3A]/25"
                               : "bg-[#1E3A5F]/50 text-gray-400 border border-white/5"
                           }`}
                         >
@@ -163,7 +163,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                         {s < 3 && (
                           <div
                             className={`h-[2px] w-8 md:w-16 rounded transition-all duration-300 ${
-                              step > s ? "bg-[#D4AF37]" : "bg-[#1E3A5F]/50"
+                              step > s ? "bg-[#C41E3A]" : "bg-[#1E3A5F]/50"
                             }`}
                           />
                         )}
@@ -208,7 +208,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                               key={item.id}
                               className={`flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-300 ${
                                 selectedService === item.id
-                                  ? "border-[#D4AF37] bg-[#D4AF37]/5"
+                                  ? "border-[#C41E3A] bg-[#C41E3A]/5"
                                   : "border-white/10 hover:border-white/20 bg-white/5"
                               }`}
                             >
@@ -216,7 +216,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                                 type="radio"
                                 value={item.id}
                                 {...register("serviceType", { required: true })}
-                                className="mt-1 accent-[#D4AF37]"
+                                className="mt-1 accent-[#C41E3A]"
                               />
                               <div>
                                 <h5 className="text-sm font-semibold text-white">{item.title}</h5>
@@ -243,12 +243,12 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
 
                         <div className="space-y-6">
                           <div>
-                            <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-2">
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-[#C41E3A] mb-2">
                               Estimated Staff / Guards Needed
                             </label>
                             <select
                               {...register("staffSize", { required: true })}
-                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#D4AF37] text-white"
+                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C41E3A] text-white"
                             >
                               <option className="bg-[#081B33]" value="1-5">1 - 5 Personnel</option>
                               <option className="bg-[#081B33]" value="6-20">6 - 20 Personnel</option>
@@ -258,7 +258,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-2">
+                            <label className="block text-xs font-semibold uppercase tracking-wider text-[#C41E3A] mb-2">
                               Deployment Period
                             </label>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -271,7 +271,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                                   key={option}
                                   className={`flex items-center justify-center p-3 rounded-lg border cursor-pointer text-xs font-medium text-center transition-all duration-300 ${
                                     watch("duration") === option
-                                      ? "border-[#D4AF37] bg-[#D4AF37]/5 text-white"
+                                      ? "border-[#C41E3A] bg-[#C41E3A]/5 text-white"
                                       : "border-white/10 bg-white/5 text-gray-400 hover:text-white"
                                   }`}
                                 >
@@ -313,7 +313,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                               type="text"
                               placeholder="Name"
                               {...register("fullName", { required: "Full name is required" })}
-                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                             />
                             {errors.fullName && (
                               <p className="text-[10px] text-red-400 mt-1">{errors.fullName.message}</p>
@@ -328,7 +328,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                               type="text"
                               placeholder="Company"
                               {...register("companyName")}
-                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                             />
                           </div>
                         </div>
@@ -348,7 +348,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                                   message: "Invalid email address",
                                 },
                               })}
-                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                             />
                             {errors.email && (
                               <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>
@@ -363,7 +363,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                               type="tel"
                               placeholder="9002570891"
                               {...register("phone", { required: "Phone is required" })}
-                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                              className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#C41E3A] text-white"
                             />
                             {errors.phone && (
                               <p className="text-[10px] text-red-400 mt-1">{errors.phone.message}</p>
@@ -379,7 +379,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                             rows={3}
                             placeholder="Tell us about specific sites, shift structures, or cleaning scope..."
                             {...register("notes")}
-                            className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
+                            className="w-full bg-[#1E3A5F]/30 border border-white/10 rounded-lg p-2.5 text-xs focus:outline-none focus:border-[#C41E3A] text-white resize-none"
                           />
                         </div>
                       </motion.div>
@@ -405,7 +405,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="flex items-center gap-1.5 text-xs font-bold text-[#081B33] bg-[#D4AF37] px-5 py-2.5 rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all duration-300"
+                        className="flex items-center gap-1.5 text-xs font-bold text-[#081B33] bg-[#C41E3A] px-5 py-2.5 rounded-lg hover:shadow-lg hover:shadow-[#C41E3A]/20 transition-all duration-300"
                       >
                         <span>Next Step</span>
                         <ChevronRight className="w-4 h-4" />
@@ -414,7 +414,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex items-center justify-center gap-2 text-xs font-bold text-[#081B33] bg-[#D4AF37] px-6 py-2.5 rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all duration-300 min-w-[120px]"
+                        className="flex items-center justify-center gap-2 text-xs font-bold text-[#081B33] bg-[#C41E3A] px-6 py-2.5 rounded-lg hover:shadow-lg hover:shadow-[#C41E3A]/20 transition-all duration-300 min-w-[120px]"
                       >
                         {isSubmitting ? (
                           <>
@@ -435,8 +435,8 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   className="h-full flex flex-col items-center justify-center text-center p-4"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#D4AF37]/10 flex items-center justify-center border border-[#D4AF37]/35 mb-6 animate-pulse">
-                    <ShieldCheck className="w-10 h-10 text-[#D4AF37]" />
+                  <div className="w-16 h-16 rounded-full bg-[#C41E3A]/10 flex items-center justify-center border border-[#C41E3A]/35 mb-6 animate-pulse">
+                    <ShieldCheck className="w-10 h-10 text-[#C41E3A]" />
                   </div>
                   <h4 className="text-xl font-bold font-display text-white mb-3">
                     Proposal Request Received
@@ -446,7 +446,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                   </p>
                   <button
                     onClick={handleClose}
-                    className="border border-[#D4AF37] text-white hover:bg-[#D4AF37] hover:text-[#081B33] px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300"
+                    className="border border-[#C41E3A] text-white hover:bg-[#C41E3A] hover:text-[#081B33] px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300"
                   >
                     Close Window
                   </button>

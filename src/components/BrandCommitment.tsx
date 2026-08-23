@@ -27,7 +27,7 @@ export default function BrandCommitment() {
   return (
     <section className="py-32 md:py-48 bg-[#081B33] text-white relative overflow-hidden flex flex-col justify-center items-center text-center border-t border-white/5">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#D4AF37]/5 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C41E3A]/5 rounded-full blur-[150px] pointer-events-none" />
 
       <motion.div
         variants={containerVariants}
@@ -46,7 +46,7 @@ export default function BrandCommitment() {
           </motion.h3>
           <motion.h3
             variants={textVariants}
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-display tracking-wider uppercase leading-none text-[#D4AF37] select-none"
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-display tracking-wider uppercase leading-none text-[#C41E3A] select-none"
           >
             We Serve.
           </motion.h3>
@@ -59,7 +59,7 @@ export default function BrandCommitment() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: "easeInOut", delay: 0.5 }}
-            className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mx-auto"
+            className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#C41E3A] to-transparent mx-auto"
           />
         )}
 
@@ -70,7 +70,7 @@ export default function BrandCommitment() {
         >
           <div className="relative w-24 h-24 shadow-2xl">
             <Image
-              src="/logo.png"
+              src="/logo-transparent.png"
               alt="SSMPS Shield Seal"
               fill
               className="object-contain"

@@ -48,7 +48,7 @@ export default function BrandArrival({ onComplete }: BrandArrivalProps) {
               className="relative w-28 h-28"
             >
               <Image
-                src="/logo.png"
+                src="/logo-transparent.png"
                 alt="SSMPS Official Logo"
                 fill
                 priority
@@ -62,7 +62,7 @@ export default function BrandArrival({ onComplete }: BrandArrivalProps) {
                 initial={{ width: 0 }}
                 animate={{ width: "80%" }}
                 transition={{ duration: 0.8, delay: 0.3, ease: "easeInOut" }}
-                className="h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
+                className="h-[1px] bg-gradient-to-r from-transparent via-[#C41E3A] to-transparent"
               />
             )}
 
@@ -72,7 +72,7 @@ export default function BrandArrival({ onComplete }: BrandArrivalProps) {
                 initial={shouldReduceMotion ? { opacity: 0 } : { y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
-                className="text-xs font-bold tracking-[0.25em] text-[#D4AF37] uppercase"
+                className="text-xs font-bold tracking-[0.25em] text-[#C41E3A] uppercase"
               >
                 YOU TRUST. WE SERVE.
               </motion.div>

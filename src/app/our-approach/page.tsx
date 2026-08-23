@@ -1,12 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ClipboardList, ZoomIn, FileCheck, ShieldCheck, Award, HeartHandshake } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function OurApproachPage() {
+  const [activeStepIdx, setActiveStepIdx] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
   const steps = [
@@ -72,64 +74,85 @@ export default function OurApproachPage() {
         {/* Banner Hero */}
         <section className="py-24 md:py-36 bg-[#081B33] text-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-6 pt-12 text-center">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
               Governance Framework
             </span>
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight uppercase max-w-4xl mx-auto">
               Structure Builds <br className="hidden sm:inline" />
               Reliability.
             </h1>
-            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
             <p className="text-xs sm:text-sm text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
               We govern our security, cleaning, and utility outsourcing deployments through a structured 6-stage roadmap. No shortcuts, just consistent oversight.
             </p>
           </div>
         </section>
 
-        {/* Process Detail Sections */}
+        {/* Process Explorer Selector */}
         <section className="py-20 bg-white">
-          <div className="max-w-5xl mx-auto px-6 md:px-8">
-            <div className="relative border-l border-gray-150 pl-8 ml-4 space-y-12">
-              
+          <div className="max-w-5xl mx-auto px-6 md:px-8 space-y-12">
+            
+            {/* Step Tabs Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 border-b border-gray-100 pb-4">
               {steps.map((item, idx) => {
                 const Icon = item.icon;
+                const isActive = activeStepIdx === idx;
                 return (
-                  <motion.div
+                  <button
                     key={idx}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-100px" }}
-                    variants={fadeUp}
-                    className="relative group space-y-3"
+                    onClick={() => setActiveStepIdx(idx)}
+                    className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-300 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#C41E3A] ${
+                      isActive 
+                        ? "bg-[#081B33] text-white border-transparent shadow-md" 
+                        : "bg-[#F8FAFC] border-gray-100 text-gray-500 hover:text-[#081B33] hover:border-gray-200"
+                    }`}
                   >
-                    {/* Node point */}
-                    <div className="absolute -left-[45px] top-1.5 w-8 h-8 rounded-full bg-[#081B33] text-[#D4AF37] flex items-center justify-center border-2 border-white shadow">
-                      <Icon className="w-4 h-4" />
-                    </div>
-
-                    <div className="flex items-baseline gap-3">
-                      <span className="text-2xl font-extrabold font-display text-[#D4AF37]">
-                        {item.num}
-                      </span>
-                      <h2 className="text-lg font-bold font-display text-[#081B33] uppercase tracking-wider">
-                        {item.title}
-                      </h2>
-                    </div>
-
-                    <div className="space-y-2 pl-8">
-                      <span className="text-[10px] font-bold text-[#C41E3A] uppercase tracking-widest block">
-                        {item.subtitle}
-                      </span>
-                      <p className="text-xs sm:text-sm text-gray-600 font-light leading-relaxed max-w-2xl">
-                        {item.desc}
-                      </p>
-                    </div>
-
-                  </motion.div>
+                    <Icon className="w-5 h-5 mb-2 stroke-[1.5]" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest font-display">
+                      {item.title}
+                    </span>
+                  </button>
                 );
               })}
-
             </div>
+
+            {/* Active Step Card */}
+            <div className="bg-[#F8FAFC] border border-gray-100 p-8 rounded-2xl min-h-[220px] relative overflow-hidden shadow-sm">
+              <div className="absolute -right-6 -bottom-10 text-[120px] font-black font-display text-[#081B33]/5 select-none pointer-events-none">
+                {steps[activeStepIdx].num}
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStepIdx}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-4 relative z-10"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#C41E3A]/5 text-[#C41E3A] flex items-center justify-center border border-[#C41E3A]/10">
+                      {(() => {
+                        const StepIcon = steps[activeStepIdx].icon;
+                        return <StepIcon className="w-5 h-5" />;
+                      })()}
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-[#C41E3A] uppercase tracking-widest block">
+                        {steps[activeStepIdx].subtitle}
+                      </span>
+                      <h3 className="text-lg font-bold font-display text-[#081B33] uppercase tracking-wider mt-0.5">
+                        {steps[activeStepIdx].title} Stage
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-sm md:text-md text-gray-600 font-light leading-relaxed max-w-2xl pt-2">
+                    {steps[activeStepIdx].desc}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
           </div>
         </section>
 
@@ -145,7 +168,7 @@ export default function OurApproachPage() {
             <div className="pt-4 flex justify-center">
               <Link
                 href="/request-proposal"
-                className="px-6 py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center gap-2 group cursor-pointer"
+                className="px-6 py-4 bg-[#C41E3A] hover:bg-[#AA771C] text-[#081B33] text-xs font-bold uppercase tracking-wider rounded transition-colors flex items-center gap-2 group cursor-pointer"
               >
                 <span>Initiate Site Discussion</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

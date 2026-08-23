@@ -35,7 +35,7 @@ export default function RegionalPresence() {
               Regional <br />
               Presence.
             </h2>
-            <div className="h-[2px] w-20 bg-[#D4AF37] my-6" />
+            <div className="h-[2px] w-20 bg-[#C41E3A] my-6" />
             <p className="text-xs sm:text-sm text-gray-500 font-light leading-relaxed">
               SSMPS currently coordinates operations from our registered office in Hyderabad, providing full service coverage across Telangana and Andhra Pradesh.
             </p>
@@ -43,13 +43,13 @@ export default function RegionalPresence() {
             {/* Presence specifications */}
             <div className="space-y-4 pt-4 border-t border-[#081B33]/5">
               <div className="flex gap-3 items-start">
-                <ShieldCheck className="w-4 h-4 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                <ShieldCheck className="w-4 h-4 text-[#C41E3A] flex-shrink-0 mt-0.5" />
                 <span className="text-xs text-gray-600 font-light">
                   Active deployments in Hyderabad and major commercial zones.
                 </span>
               </div>
               <div className="flex gap-3 items-start">
-                <MapPin className="w-4 h-4 text-[#D4AF37] flex-shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#C41E3A] flex-shrink-0 mt-0.5" />
                 <span className="text-xs text-gray-600 font-light">
                   Expanding capability framework to cover adjacent Southern India markets.
                 </span>
@@ -81,7 +81,7 @@ export default function RegionalPresence() {
                 d="M 260 170 Q 300 150 340 190 Q 350 240 310 260 Q 270 270 250 220 Z"
                 fill="#081B33"
                 fillOpacity="0.85"
-                stroke="#D4AF37"
+                stroke="#C41E3A"
                 strokeWidth="1.5"
                 initial={shouldReduceMotion ? { fillOpacity: 0.85 } : { fillOpacity: 0.1 }}
                 whileInView={{ fillOpacity: 0.85 }}
@@ -94,7 +94,7 @@ export default function RegionalPresence() {
                 d="M 310 260 Q 350 240 380 280 Q 400 340 340 370 Q 290 350 280 300 Q 290 280 310 260 Z"
                 fill="#081B33"
                 fillOpacity="0.5"
-                stroke="#D4AF37"
+                stroke="#C41E3A"
                 strokeWidth="1"
                 initial={shouldReduceMotion ? { fillOpacity: 0.5 } : { fillOpacity: 0.1 }}
                 whileInView={{ fillOpacity: 0.5 }}
@@ -137,20 +137,20 @@ export default function RegionalPresence() {
               />
 
               {/* Andhra Pradesh regional node */}
-              <circle cx="340" cy="310" r="4" fill="#D4AF37" />
+              <circle cx="340" cy="310" r="4" fill="#C41E3A" />
 
               {/* Expansion direction arrow paths */}
-              <path d="M 250 270 L 210 270 M 210 270 L 220 260 M 210 270 L 220 280" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" />
-              <path d="M 330 380 L 330 410 M 330 410 L 320 400 M 330 410 L 340 400" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M 250 270 L 210 270 M 210 270 L 220 260 M 210 270 L 220 280" stroke="#C41E3A" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M 330 380 L 330 410 M 330 410 L 320 400 M 330 410 L 340 400" stroke="#C41E3A" strokeWidth="1.5" strokeLinecap="round" />
 
               {/* Labels */}
               <text x="300" y="195" fill="#FFFFFF" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="var(--font-manrope)">
                 HYDERABAD HQ
               </text>
-              <text x="290" y="240" fill="#D4AF37" fontSize="12" fontWeight="bold" fontFamily="var(--font-manrope)">
+              <text x="290" y="240" fill="#C41E3A" fontSize="12" fontWeight="bold" fontFamily="var(--font-manrope)">
                 TELANGANA
               </text>
-              <text x="330" y="340" fill="#D4AF37" fontSize="11" fontWeight="bold" fontFamily="var(--font-manrope)">
+              <text x="330" y="340" fill="#C41E3A" fontSize="11" fontWeight="bold" fontFamily="var(--font-manrope)">
                 ANDHRA PRADESH
               </text>
               

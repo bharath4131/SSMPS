@@ -58,7 +58,7 @@ export default function ProcessTimeline() {
             From requirement <br />
             to reliable delivery.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+          <div className="h-[2px] w-20 bg-[#C41E3A] mx-auto mt-4" />
         </div>
 
         {/* Desktop View: Immersive Horizontal Process */}
@@ -71,7 +71,7 @@ export default function ProcessTimeline() {
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#D4AF37] origin-left -translate-y-1/2 z-10"
+              className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#C41E3A] origin-left -translate-y-1/2 z-10"
             />
           )}
 
@@ -87,11 +87,11 @@ export default function ProcessTimeline() {
                   transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
                   className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center space-y-4"
                 >
-                  <div className="w-10 h-10 rounded bg-[#081B33] flex items-center justify-center text-[#D4AF37] shadow-md">
+                  <div className="w-10 h-10 rounded bg-[#081B33] flex items-center justify-center text-[#C41E3A] shadow-md">
                     <Icon className="w-4.5 h-4.5" />
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider block">
+                    <span className="text-[10px] font-bold text-[#C41E3A] uppercase tracking-wider block">
                       Step {step.num}
                     </span>
                     <h3 className="text-xs font-bold uppercase tracking-wider text-[#081B33] font-display">
@@ -117,7 +117,7 @@ export default function ProcessTimeline() {
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="absolute top-0 bottom-0 left-[18px] w-[2px] bg-[#D4AF37] origin-top z-10"
+              className="absolute top-0 bottom-0 left-[18px] w-[2px] bg-[#C41E3A] origin-top z-10"
             />
           )}
 
@@ -133,12 +133,12 @@ export default function ProcessTimeline() {
                   transition={{ duration: 0.5, delay: idx * 0.08 }}
                   className="flex gap-4 items-start relative z-20"
                 >
-                  <div className="w-9 h-9 rounded bg-[#081B33] flex items-center justify-center text-[#D4AF37] shadow flex-shrink-0">
+                  <div className="w-9 h-9 rounded bg-[#081B33] flex items-center justify-center text-[#C41E3A] shadow flex-shrink-0">
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block">
+                      <span className="text-[9px] font-bold text-[#C41E3A] uppercase tracking-widest block">
                         Step {step.num}
                       </span>
                       <h3 className="text-xs font-bold uppercase tracking-wider text-[#081B33] font-display">

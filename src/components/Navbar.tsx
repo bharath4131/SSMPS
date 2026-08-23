@@ -19,6 +19,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
   const shouldReduceMotion = useReducedMotion();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const megaMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +27,17 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Handle click-away for mega menu
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (megaMenuRef.current && !megaMenuRef.current.contains(e.target as Node)) {
+        setIsMegaMenuOpen(false);
+      }
+    };
+    window.addEventListener("click", handleOutsideClick);
+    return () => window.removeEventListener("click", handleOutsideClick);
   }, []);
 
   // Handle Escape key to close menus
@@ -107,7 +119,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+          isScrolled || pathname !== "/"
             ? "bg-[#081B33]/95 backdrop-blur-md border-b border-white/5 py-4 shadow-lg shadow-black/10"
             : "bg-transparent py-6 border-b border-white/5"
         }`}
@@ -118,7 +130,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-102">
               <Image
-                src="/logo.png"
+                src="/logo-transparent.png"
                 alt="SSMPS Logo"
                 fill
                 priority
@@ -126,10 +138,10 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold font-display tracking-wider text-white group-hover:text-[#D4AF37] transition-colors duration-300 uppercase">
+              <span className="text-lg font-bold font-display tracking-wider text-white group-hover:text-[#C41E3A] transition-colors duration-300 uppercase">
                 SSMPS
               </span>
-              <span className="text-[8px] font-medium tracking-[0.25em] text-[#D4AF37] uppercase -mt-1.5">
+              <span className="text-[8px] font-medium tracking-[0.25em] text-gray-300 uppercase -mt-1.5">
                 Manpower solutions
               </span>
             </div>
@@ -140,7 +152,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
             <Link
               href="/about"
               className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
-                pathname === "/about" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                pathname === "/about" ? "text-[#C41E3A]" : "text-gray-300 hover:text-white"
               }`}
             >
               About
@@ -148,14 +160,14 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
 
             {/* Capabilities Dropdown (Mega-Menu trigger) */}
             <div
+              ref={megaMenuRef}
               className="relative"
-              onMouseEnter={() => setIsMegaMenuOpen(true)}
-              onMouseLeave={() => setIsMegaMenuOpen(false)}
             >
               <button
                 ref={triggerRef}
+                onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
                 className={`text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors duration-300 cursor-pointer ${
-                  pathname.startsWith("/services") ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                  pathname.startsWith("/services") ? "text-[#C41E3A]" : "text-gray-300 hover:text-white"
                 }`}
                 aria-expanded={isMegaMenuOpen}
                 aria-haspopup="true"
@@ -174,7 +186,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 bg-[#081B33] border border-white/10 rounded-lg p-5 shadow-2xl z-50"
                   >
                     <div className="space-y-4">
-                      <div className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest border-b border-white/5 pb-2">
+                      <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest border-b border-white/5 pb-2">
                         Service Divisions
                       </div>
                       <div className="flex flex-col gap-3">
@@ -182,9 +194,10 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
                           <Link
                             key={item.name}
                             href={item.href}
+                            onClick={() => setIsMegaMenuOpen(false)}
                             className="group/item flex flex-col p-2.5 rounded hover:bg-white/5 transition-colors"
                           >
-                            <span className="text-xs font-bold text-white group-hover/item:text-[#D4AF37] transition-colors">
+                            <span className="text-xs font-bold text-white group-hover/item:text-[#C41E3A] transition-colors">
                               {item.name}
                             </span>
                             <span className="text-[10px] text-gray-400 font-light mt-0.5 leading-relaxed">
@@ -202,7 +215,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
             <Link
               href="/industries"
               className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
-                pathname === "/industries" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                pathname === "/industries" ? "text-[#C41E3A]" : "text-gray-300 hover:text-white"
               }`}
             >
               Industries
@@ -211,7 +224,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
             <Link
               href="/our-approach"
               className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
-                pathname === "/our-approach" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                pathname === "/our-approach" ? "text-[#C41E3A]" : "text-gray-300 hover:text-white"
               }`}
             >
               Our Approach
@@ -220,7 +233,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
             <Link
               href="/contact"
               className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
-                pathname === "/contact" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                pathname === "/contact" ? "text-[#C41E3A]" : "text-gray-300 hover:text-white"
               }`}
             >
               Contact
@@ -233,18 +246,18 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               href="/request-proposal"
               className="group flex flex-col items-end py-1 text-xs font-bold tracking-wider text-white uppercase"
             >
-              <div className="flex items-center gap-1.5 group-hover:text-[#D4AF37] transition-colors duration-300">
+              <div className="flex items-center gap-1.5 group-hover:text-[#C41E3A] transition-colors duration-300">
                 <span>Request a Proposal</span>
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </div>
-              <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover:bg-[#D4AF37] group-hover:w-full" />
+              <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover:bg-[#C41E3A] group-hover:w-full" />
             </Link>
           </div>
 
           {/* Mobile Menu Toggler */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-white hover:text-[#D4AF37] transition-colors duration-300 cursor-pointer"
+            className="lg:hidden text-white hover:text-[#C41E3A] transition-colors duration-300 cursor-pointer"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -272,13 +285,13 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               <Link
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#C41E3A] transition-colors"
               >
                 About
               </Link>
 
               <div className="space-y-4">
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block border-b border-white/5 pb-2">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block border-b border-white/5 pb-2">
                   Capabilities
                 </span>
                 <div className="flex flex-col gap-4 pl-2">
@@ -287,7 +300,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
                       key={item.name}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-md font-bold uppercase tracking-wider text-gray-200 hover:text-[#D4AF37] transition-colors"
+                      className="text-md font-bold uppercase tracking-wider text-gray-200 hover:text-[#C41E3A] transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -298,7 +311,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               <Link
                 href="/industries"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#C41E3A] transition-colors"
               >
                 Industries
               </Link>
@@ -306,7 +319,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               <Link
                 href="/our-approach"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#C41E3A] transition-colors"
               >
                 Our Approach
               </Link>
@@ -314,7 +327,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               <Link
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#C41E3A] transition-colors"
               >
                 Contact
               </Link>
@@ -324,7 +337,7 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
               <Link
                 href="/request-proposal"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="py-4 text-center text-xs font-bold tracking-wider text-[#081B33] bg-[#D4AF37] hover:bg-[#AA771C] rounded shadow-lg uppercase transition-colors"
+                className="py-4 text-center text-xs font-bold tracking-wider text-white bg-[#C41E3A] hover:bg-[#A3182E] rounded shadow-lg uppercase transition-colors"
               >
                 Request a Proposal
               </Link>
