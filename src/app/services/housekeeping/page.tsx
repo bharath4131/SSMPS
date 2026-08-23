@@ -90,56 +90,56 @@ export default function HousekeepingServicePage() {
   const housekeepingServicesList = [
     { 
       icon: Briefcase, 
-      title: "Office Housekeeping", 
-      desc: "Desk dusting, conference room sanitization, waste separation, and general daily workspace maintenance." 
+      title: "Workspace Upkeep", 
+      desc: "Providing professional housekeeping support to maintain clean and well-maintained environments." 
     },
     { 
       icon: Layers, 
-      title: "Glass & Window Cleaning", 
-      desc: "Access-safe window washing, streak removals, and structural glass facade partition detailing." 
+      title: "Glass & Surface Care", 
+      desc: "Consistent service delivery and surface upkeep customized to environment-specific requirements." 
     },
     { 
       icon: Brush, 
-      title: "Carpet Care & Scrubbing", 
-      desc: "Vacuuming cycles, stain spot cleanups, fabric freshening, and deep dirt extraction." 
+      title: "Floor & Carpet Care", 
+      desc: "Routine cleaning support to maintain dust-free, clean, and well-maintained environments." 
     },
     { 
       icon: Wrench, 
-      title: "Floor Maintenance", 
-      desc: "Marble restoration, diamond-grit floor scrubbing, tile polishings, and grout joint care." 
+      title: "General Maintenance Support", 
+      desc: "Consistent service delivery for floor preservation and overall site tidiness." 
     },
     { 
       icon: Bath, 
-      title: "Sanitary Station Upkeep", 
-      desc: "Hourly restroom cleanliness checks, dispenser refilling, scale clearing, and deodorization protocols." 
+      title: "Hygiene Maintenance", 
+      desc: "Professional housekeeping support to establish hygienic, clean, and well-maintained environments." 
     },
     { 
       icon: Building, 
-      title: "Common Area Hygiene", 
-      desc: "Lobby floor moppings, elevator panels wipe downs, railing sanitizing, and reception tidiness." 
+      title: "Common Area Care", 
+      desc: "Managing general common zone cleaning matching environment-specific requirements." 
     },
   ];
 
   const housekeepingProcess = [
-    { title: "Walkthrough", desc: "Inspect facility square footage, tile materials, window access, and high-traffic zone densities." },
-    { title: "Material Setup", desc: "Map professional non-toxic cleaning agents, compile MSDS safety checkouts, and align gear." },
-    { title: "Schedule SOP", desc: "Draw granular hourly/weekly checklists detailing post logs and shift timings." },
-    { title: "Supervisor Check", desc: "Supervisors execute audit checklist scorecards verifying cleaning detail quality." },
-    { title: "Calibrate Roster", desc: "Conduct routine client meetings to adjust staffing frequencies based on seasonal footfall." },
+    { title: "Discussion", desc: "Understand facility parameters, shift preferences, and environment-specific requirements." },
+    { title: "Planning", desc: "Formulate cleaning checklists to support consistent service delivery." },
+    { title: "Roster Setup", desc: "Organize duty rosters to ensure professional housekeeping support coverage." },
+    { title: "Coordination", desc: "Operational supervisors check on-site checklists to maintain standards." },
+    { title: "Calibrate Support", desc: "Conduct regular reviews to adapt staffing support based on site requirements." },
   ];
 
   const housekeepingFaqs = [
     { 
-      q: "What types of cleaning agents and tools do you use?", 
-      a: "We deploy eco-friendly, biodegradable commercial cleaning solutions. Our teams are equipped with heavy-duty vacuum extractors, microfiber cloths, and streak-free window squeegees." 
+      q: "What cleaning materials and tools do you use?", 
+      a: "We utilize standard commercial cleaning tools and materials to ensure clean and well-maintained environments." 
     },
     { 
-      q: "Are the housekeeping staff background verified?", 
-      a: "Yes. Every staff candidate is verified through local police address checkouts and national identity databases before on-site deployment." 
+      q: "How do you verify your housekeeping staff?", 
+      a: "Every staff candidate is subject to verification checks before on-site placement." 
     },
     { 
-      q: "Can you supply the pantry consumables?", 
-      a: "We offer both options: we can manage and supply restroom soap, tissue rolls, and paper towels under the monthly agreement, or clean utilizing your stock." 
+      q: "Can you supply sanitary consumables?", 
+      a: "Yes, we can coordinate the supply of standard washroom consumables under the service agreement if requested." 
     },
   ];
 
@@ -257,7 +257,7 @@ export default function HousekeepingServicePage() {
               </div>
 
               <div className="p-6 rounded-2xl border border-white/5 bg-[#1E3A5F]/15 text-xs text-gray-300 leading-relaxed">
-                <strong>Standard Consumables:</strong> We align dilution ratios and chemical selections to protect stone surfaces and wood laminates.
+                <strong>Service Standards:</strong> We align our housekeeping support to deliver clean and well-maintained environments matching site requirements.
               </div>
             </div>
 

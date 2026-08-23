@@ -90,51 +90,51 @@ export default function FacilityManagementServicePage() {
   const facilityServicesList = [
     { 
       icon: Zap, 
-      title: "Building Electricians", 
-      desc: "Outsourced technicians trained in panel inspections, grid routing safety, and utility monitoring." 
+      title: "Operational Coordination", 
+      desc: "Coordinating day-to-day operations and utility schedules to ensure smooth site functionality." 
     },
     { 
       icon: Droplets, 
-      title: "Plumbing Support", 
-      desc: "Commercial plumbing maintenance, overhead tank checks, water grid flow reviews, and sanitizing logistics." 
+      title: "Planning & Roster Support", 
+      desc: "Environment-specific service planning and roster alignment to prevent vacancy coverage gaps." 
     },
     { 
       icon: UserPlus, 
-      title: "Reception & Admin Hosts", 
-      desc: "Front-desk administrative coordinators managing telephone routing, badge printing, and guest logs." 
+      title: "Support Desk Services", 
+      desc: "Providing front-desk routing support, visitor log management, and service continuity." 
     },
     { 
       icon: Coffee, 
-      title: "Pantry Stewards", 
-      desc: "Trained pantry boys and catering stewards to manage boardroom coffee stations and meeting snacks." 
+      title: "Pantry Support", 
+      desc: "Delivering support for boardroom refreshment areas and meeting layouts." 
     },
     { 
       icon: Building, 
-      title: "Handyman Caretakers", 
-      desc: "Maintenance supervisors to handle minor carpentry checks, ceiling grid alignments, and structural inspections." 
+      title: "Service Continuity", 
+      desc: "Ensuring site systems are checked and maintained through operational supervision." 
     },
   ];
 
   const workflowSteps = [
-    { num: "01", step: "Environment", desc: "Understand your layout, electrical load, pantry grids, and visitor densities." },
-    { num: "02", step: "Requirements", desc: "Map required trade certifications (e.g. electricians) and shifts schedule details." },
-    { num: "03", step: "Planning", desc: "Author specialized roster handbooks and safety guidelines for the utility team." },
-    { num: "04", step: "Support", desc: "Deploy the verified crew and coordinate on-site duty log updates." },
-    { num: "05", step: "Continuity", desc: "Our supervisors handle attendance audits and deploy replacements for leaves." },
+    { num: "01", step: "Environment", desc: "Understand your layout details and general site support requirements." },
+    { num: "02", step: "Planning", desc: "Map required duty shifts and scheduling requirements." },
+    { num: "03", step: "Coordination", desc: "Align standard service checkouts and support guidelines." },
+    { num: "04", step: "Support", desc: "Deploy the coordinated crew and set up daily schedules." },
+    { num: "05", step: "Continuity", desc: "Our supervisors review attendance and manage leaves diligently." },
   ];
 
   const facilityFaqs = [
     { 
-      q: "What certifications do your technicians hold?", 
-      a: "All deployed electricians and technical plumbers hold valid trade credentials or trade-school diplomas (ITI) and undergo site safety drill checkouts." 
+      q: "How do you ensure service quality?", 
+      a: "All deployed personnel undergo background checkouts and receive practical instruction guidelines before deployment." 
     },
     { 
       q: "Do you cover statutory compliance receipts?", 
-      a: "Yes. All monthly invoices are delivered alongside statutory ESIC, PF minimum wage payments, and GST compliance challan logs." 
+      a: "Yes. All monthly invoices are processed in full compliance with state labor and administrative laws." 
     },
     { 
-      q: "How fast can you replace absent utility personnel?", 
-      a: "We maintain reserve candidates in our database. Absent staff alerts trigger our coordinator, who dispatches a qualified replacement within 24 hours." 
+      q: "How do you manage roster absenteeism?", 
+      a: "We maintain reserve personnel to ensure prompt replacements in case of scheduled leaves, keeping services continuous." 
     },
   ];
 
@@ -379,19 +379,19 @@ export default function FacilityManagementServicePage() {
                       {...register("staffCategory")}
                       className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     >
-                      <option value="Electrician Plumber">Electrician / Plumber</option>
-                      <option value="Reception Admin">Reception / Admin</option>
-                      <option value="Pantry Host">Pantry Steward</option>
+                      <option value="Technical Support">Technical Support / Maintenance</option>
+                      <option value="Reception Support">Reception Support / Admin</option>
+                      <option value="Pantry Support">Pantry Support</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="notes" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Site Details / Notes</label>
+                  <label htmlFor="notes" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Roster Details / Notes</label>
                   <textarea
                     id="notes"
                     rows={3}
-                    placeholder="Describe specific work schedules, technical trade license certifications required, etc..."
+                    placeholder="Describe your site details or specific scheduling requirements..."
                     {...register("notes")}
                     className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
                   />

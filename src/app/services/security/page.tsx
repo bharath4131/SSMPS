@@ -88,61 +88,61 @@ export default function SecurityServicePage() {
   const securityServicesList = [
     { 
       icon: Building, 
-      title: "Corporate Security", 
-      desc: "Access control, receptionist-guard duties, visitor routing, and badge scanning for office parks and headquarters." 
+      title: "Corporate Support", 
+      desc: "Providing professional security support, operational discipline, and reliable service coordination." 
     },
     { 
       icon: Factory, 
-      title: "Industrial Security", 
-      desc: "Materials register checks, dock management, perimeter watch rounds, and multi-shift yard administration for factories." 
+      title: "Industrial Support", 
+      desc: "Environment-specific service planning, security support, and operational discipline for industrial zones." 
     },
     { 
       icon: Home, 
-      title: "Residential Society Patrolls", 
-      desc: "Fixed gate monitoring, intercom validation logging, and patrol rounds for apartments and gated communities." 
+      title: "Residential Support", 
+      desc: "Professional security support, service coordination, and operational discipline for communities." 
     },
     { 
       icon: Hospital, 
-      title: "Healthcare Environment Security", 
-      desc: "Visitor flow coordination, emergency zone safety control, and key clinic asset protection." 
+      title: "Healthcare Support", 
+      desc: "Environment-specific service planning and professional security support customized for healthcare locations." 
     },
     { 
       icon: School, 
-      title: "Education Safety Staffing", 
-      desc: "Access-gate auditing, campus corridor patrols, and student pick-up safety coordination." 
+      title: "Education Support", 
+      desc: "Reliable service coordination, operational discipline, and security support for campuses." 
     },
     { 
       icon: ShieldCheck, 
-      title: "Trained Security Personnel", 
-      desc: "Disciplined security officers trained in basic first aid, entry checking, fire drill safety, and incident log bookkeeping." 
+      title: "Operational Discipline", 
+      desc: "Deployment of personnel focused on environment-specific service planning and professional security support." 
     },
   ];
 
   const securityProcess = [
-    { title: "Discuss Requirement", desc: "Understand site boundaries, specific gate rules, shift requirements, and supervisor contact protocols." },
-    { title: "Assess Post Guidelines", desc: "Our supervisor reviews entry/exit spots to draft standard post instructions and gate entry checklists." },
-    { title: "Select Personnel", desc: "Select guards from our verified directory matching the shift schedules and uniform guidelines." },
-    { title: "Deploy Roster", desc: "Dispatch the selected personnel, confirm post instruction handbooks on site, and align shift change logs." },
-    { title: "Operational Supervision", desc: "Conduct routine supervisory checkups to verify roster compliance, attendance, and uniform tidiness." },
+    { title: "Discuss Requirement", desc: "Coordinate on site parameters, shift preferences, and general planning expectations." },
+    { title: "Assess Environment", desc: "Review the site layout to establish environment-specific service planning criteria." },
+    { title: "Roster Planning", desc: "Structure personnel schedules to meet reliable service coordination objectives." },
+    { title: "Deploy & Coordinate", desc: "Initialize service schedules and establish operational supervisor coordination lines." },
+    { title: "Supervision Review", desc: "Conduct routine checking of attendance logs to maintain high operational discipline." },
   ];
 
   /*
    * VERIFICATION REQUIRED:
    * The following FAQ block references state compliance rules and licensing.
-   * If PSARA license credentials are not verified, keep these visual descriptions neutral.
+   * If credentials are not verified, keep these visual descriptions neutral.
    */
   const securityFaqs = [
     { 
-      q: "What training do your security guards undergo?", 
-      a: "All deployed personnel undergo base training modules covering access-gate logging, fire safety drills, emergency evacuation paths, and customer-first communication." 
+      q: "How do you ensure service standards?", 
+      a: "Our personnel undergo training programs focusing on operational discipline, environment-specific service planning, and reliable service coordination." 
     },
     { 
       q: "How are roster absenteeism and shift handovers managed?", 
-      a: "We maintain a buffer workforce pool. In case of emergency leaves, our scheduling logs alert the operations supervisor, and a replacement is sent to the site within 2 hours to ensure continuous post coverage." 
+      a: "We coordinate shifts diligently. In case of leaves, our supervisors work to ensure roster compliance and continuous support coverage." 
     },
     { 
-      q: "How do you check on guard alertness during night shifts?", 
-      a: "Our field managers perform surprise night rounds, auditing the check-in sheets and logbooks, ensuring guard posts are never vacant." 
+      q: "Do you have supervisors check the sites?", 
+      a: "Yes, our operational supervision team conducts routine visits to verify attendance and compliance with client instructions." 
     },
   ];
 

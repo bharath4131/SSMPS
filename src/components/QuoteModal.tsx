@@ -130,7 +130,7 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
               </div>
 
               <div className="text-[9px] text-gray-400">
-                &copy; {new Date().getFullYear()} SSMPS. Government Licensed.
+                &copy; {new Date().getFullYear()} SSMPS.
               </div>
             </div>
 
@@ -191,17 +191,17 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
                             {
                               id: "Security Services",
                               title: "Security Services",
-                              desc: "Corporate, industrial guards, armed/unarmed, VIP safety & CCTV.",
+                              desc: "Professional security support and reliable service coordination.",
                             },
                             {
                               id: "Housekeeping Services",
                               title: "Housekeeping Services",
-                              desc: "Commercial cleaning, corporate housekeeping, deep disinfection.",
+                              desc: "Professional housekeeping support and clean environments.",
                             },
                             {
                               id: "Outsourcing Manpower Solutions",
                               title: "Manpower Outsourcing (Facility)",
-                              desc: "Electrical, plumbing, gardeners, reception, pantry, & admin staff.",
+                              desc: "Operational coordination, planning, and service continuity support.",
                             },
                           ].map((item) => (
                             <label
