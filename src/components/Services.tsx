@@ -1,305 +1,249 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Building,
-  Factory,
-  Home,
-  Hospital,
-  School,
-  Calendar,
-  ShieldAlert,
-  ShieldCheck,
-  UserCheck,
-  Users,
-  Video,
-  Flame,
-  Briefcase,
-  Store,
-  HardHat,
-  Sparkles,
-  Layers,
-  Brush,
-  Wrench,
-  Bath,
-  Zap,
-  Droplets,
-  UserPlus,
-  Coffee,
-  Leaf,
-  ArrowRight,
-} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Shield, Sparkles, Settings, Plus, Minus } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function Services() {
-  const [activeCategory, setActiveCategory] = useState("security");
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const shouldReduceMotion = useReducedMotion();
 
-  const categories = [
-    { id: "security", label: "Security Services" },
-    { id: "housekeeping", label: "Housekeeping Services" },
-    { id: "facility", label: "Facility Management" },
+  const services = [
+    {
+      title: "Security Services",
+      shortTitle: "Security",
+      href: "/services/security",
+      desc: "Trained personnel, strict reporting lines, and structured access controls. We deploy security solutions custom-tailored for corporate offices, manufacturing plants, and residential societies.",
+      features: [
+        "Corporate Gate Access Auditing",
+        "Industrial Perimeter Patrols",
+        "Residential Entry Logging",
+        "Unarmed Security Personnel",
+      ],
+      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop",
+      icon: Shield,
+    },
+    {
+      title: "Housekeeping Services",
+      shortTitle: "Housekeeping",
+      href: "/services/housekeeping",
+      desc: "Commercial cleaning, deep sanitization, and daily workplace upkeep. We maintain hygienic, pristine, and safe commercial and industrial environments following custom SLA parameters.",
+      features: [
+        "Corporate Floor Deep Cleaning",
+        "Industrial Disinfection Routines",
+        "Common Area Hygiene Care",
+        "Stone Diamond Floor Polishing",
+      ],
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop",
+      icon: Sparkles,
+    },
+    {
+      title: "Facility Management",
+      shortTitle: "Facilities",
+      href: "/services/facility-management",
+      desc: "Outsourced technicians, utility staff, and on-site coordinators. We provide building maintenance professionals to ensure electrical, plumbing, and general facility systems run without downtime.",
+      features: [
+        "Building Electricians & Plumbers",
+        "Lobby Reception & Front-Desk Staff",
+        "Pantry & Server Outsource",
+        "Operational Roster Maintenance",
+      ],
+      image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop",
+      icon: Settings,
+    },
   ];
 
-  const serviceData = {
-    security: {
-      headline: "Commanding Authority. Bulletproof Safety.",
-      desc: "Our security force is government-licensed, PSARA-compliant, and fully vetted. We protect physical assets, critical infrastructure, and VIPs across Hyderabad.",
-      items: [
-        {
-          icon: Building,
-          title: "Corporate Security",
-          desc: "Concierge-level protection customized for high-rise corporate towers and MNC office hubs.",
-        },
-        {
-          icon: Factory,
-          title: "Industrial Security",
-          desc: "Heavy-patrol security for factories, warehouse yards, and manufacturing facilities.",
-        },
-        {
-          icon: Home,
-          title: "Residential Security",
-          desc: "Vigilant perimeter defense and entry monitoring for high-end villas and private estates.",
-        },
-        {
-          icon: Building,
-          title: "Apartment Security",
-          desc: "Gate log checkouts and boundary monitoring for luxury apartment complexes and societies.",
-        },
-        {
-          icon: Hospital,
-          title: "Hospital Security",
-          desc: "SOP-driven security managing sensitive healthcare zones, emergency exits, and crowds.",
-        },
-        {
-          icon: School,
-          title: "School Security",
-          desc: "Background-verified guards ensuring safe student corridors and child protection audits.",
-        },
-        {
-          icon: Calendar,
-          title: "Event Security",
-          desc: "Temporary event security, guest flow control, and safety layouts for corporate seminars.",
-        },
-        {
-          icon: ShieldAlert,
-          title: "Armed Guards",
-          desc: "Licensed armed security officers for critical safety zones and asset transfers.",
-        },
-        {
-          icon: ShieldCheck,
-          title: "Unarmed Guards",
-          desc: "Highly-trained unarmed officers for general surveillance, access control, and patrol loops.",
-        },
-        {
-          icon: UserCheck,
-          title: "Bouncer Services",
-          desc: "Elite close-protection personnel for crowd management and corporate guest safety.",
-        },
-        {
-          icon: Users,
-          title: "VIP Protection",
-          desc: "Bespoke executive protection details and security escorts for high-profile delegates.",
-        },
-        {
-          icon: Video,
-          title: "CCTV Monitoring",
-          desc: "24/7 remote telemetry control room monitoring, alarm dispatches, and log audits.",
-        },
-        {
-          icon: Flame,
-          title: "Fire Safety Officers",
-          desc: "Certified emergency response officers trained in fire control, drill setup, and hazard checks.",
-        },
-      ],
-    },
-    housekeeping: {
-      headline: "Pristine Upkeep. Clinical Disinfection.",
-      desc: "We deliver luxury-grade corporate housekeeping services using eco-friendly Diversey chemicals, certified disinfection SOPs, and heavy-grade industrial scrubbers.",
-      items: [
-        {
-          icon: Briefcase,
-          title: "Office Housekeeping",
-          desc: "Daily office upkeep including desk grooming, meeting room sanitization, and lobby polish.",
-        },
-        {
-          icon: Home,
-          title: "Residential Housekeeping",
-          desc: "Bespoke housekeeping, domestic sanitation, and daily cleaning for luxury residencies.",
-        },
-        {
-          icon: Hospital,
-          title: "Hospital Housekeeping",
-          desc: "Clinical sanitization and infection control complying with medical-grade sterility standards.",
-        },
-        {
-          icon: Store,
-          title: "Mall Housekeeping",
-          desc: "Scalable cleaning rosters for high-traffic shopping centers, food courts, and washrooms.",
-        },
-        {
-          icon: HardHat,
-          title: "Industrial Cleaning",
-          desc: "Heavy-machinery area sanitization, grease removal, and warehouse floor maintenance.",
-        },
-        {
-          icon: Sparkles,
-          title: "Deep Cleaning",
-          desc: "Intensive chemical restoration, high-pressure washing, and comprehensive sanitization.",
-        },
-        {
-          icon: Layers,
-          title: "Glass Cleaning",
-          desc: "Certified rope-access safety facades and exterior high-rise window scrubbing.",
-        },
-        {
-          icon: Brush,
-          title: "Carpet Cleaning",
-          desc: "Vacuum extraction, dry-foam cleaning, stain removal, and sanitization of carpets.",
-        },
-        {
-          icon: Wrench,
-          title: "Floor Maintenance",
-          desc: "Diamond-grit marble polishing, wood waxing, and stone restoration services.",
-        },
-        {
-          icon: Bath,
-          title: "Washroom Maintenance",
-          desc: "Hourly sanitation routines, odor-control maintenance, and hygiene refilling.",
-        },
-      ],
-    },
-    facility: {
-      headline: "Outsourced Staffing. Seamless Operations.",
-      desc: "SSMPS fills critical utility staff vacancies, providing certified electricians, front-desk administrators, pantry hosts, and gardeners on SLA contracts.",
-      items: [
-        {
-          icon: Zap,
-          title: "Electrical Maintenance",
-          desc: "Certified industrial and domestic building electricians for diagnostic repairs and grid upkeep.",
-        },
-        {
-          icon: Droplets,
-          title: "Plumbing",
-          desc: "Immediate diagnostic plumbers for piping audits, overhead tanks, and water grids upkeep.",
-        },
-        {
-          icon: UserPlus,
-          title: "Reception Staff",
-          desc: "Polite, trained front-desk administrators managing visitor logs and phone lines.",
-        },
-        {
-          icon: Coffee,
-          title: "Pantry Services",
-          desc: "Hygienic pantry servers managing coffee stations and board meeting refreshments.",
-        },
-        {
-          icon: Leaf,
-          title: "Garden Maintenance",
-          desc: "Professional landscaping, regular mowing, pruning, and horticultural care.",
-        },
-        {
-          icon: Building,
-          title: "Building Maintenance",
-          desc: "General handymen for carpentry repairs, masonry touch-ups, and structure audits.",
-        },
-      ],
-    },
-  };
-
-  const currentData = serviceData[activeCategory as keyof typeof serviceData];
-
   return (
-    <section id="services" className="py-24 md:py-32 bg-[#081B33] text-white relative">
-      {/* Visual background lights */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#1E3A5F]/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#D4AF37]/5 rounded-full blur-[150px] pointer-events-none" />
+    <section id="services" className="py-24 md:py-36 bg-[#081B33] text-white relative overflow-hidden border-t border-white/5">
+      {/* Subtle ambient blur background */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#1E3A5F]/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         
-        {/* Top Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-6 mb-16 md:mb-24">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-            Core Competencies
+        {/* Header Block */}
+        <div className="space-y-4 mb-16 md:mb-24 text-left max-w-3xl">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
+            Capabilities
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight">
-            Complete Enterprise Service Spectrum.
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-white uppercase leading-tight">
+            Three capabilities. One responsible partner.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+          <div className="h-[2px] w-20 bg-[#D4AF37] mt-4" />
         </div>
 
-        {/* Tab Controls */}
-        <div className="flex justify-center mb-16">
-          <div className="inline-flex p-1 bg-[#1E3A5F]/20 border border-white/5 rounded-xl backdrop-blur-md">
-            {categories.map((category) => (
+        {/* Desktop View: Expanding Panels Layout */}
+        <div className="hidden md:flex gap-4 h-[500px]">
+          {services.map((item, idx) => {
+            const Icon = item.icon;
+            const isActive = activeIndex === idx;
+            return (
               <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`relative px-4 py-2.5 md:px-8 md:py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                  activeCategory === category.id
-                    ? "bg-[#D4AF37] text-[#081B33] shadow-lg shadow-[#D4AF37]/25"
-                    : "text-gray-400 hover:text-white"
+                key={idx}
+                onClick={() => setActiveIndex(idx)}
+                className={`relative overflow-hidden rounded-2xl border transition-all duration-500 text-left flex flex-col justify-between p-8 focus:outline-none focus:ring-1 focus:ring-[#D4AF37] cursor-pointer ${
+                  isActive
+                    ? "flex-[3.5] bg-[#0c223d] border-[#D4AF37]/50 shadow-xl"
+                    : "flex-[1] bg-[#0c1f36] border-white/5 opacity-70 hover:opacity-100 hover:border-white/10"
                 }`}
+                aria-expanded={isActive}
               >
-                {category.label}
-              </button>
-            ))}
-          </div>
-        </div>
+                {/* Background image when active */}
+                {isActive && (
+                  <div className="absolute inset-0 z-0">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className={`object-cover opacity-15 transition-transform duration-700 ${
+                        shouldReduceMotion ? "" : "scale-105"
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-[#081B33]/80" />
+                  </div>
+                )}
 
-        {/* Categories Details Panel */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start"
-          >
-            {/* Left: Summary Block */}
-            <div className="lg:col-span-4 lg:sticky lg:top-28 space-y-6">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
-                Operational Outline
-              </span>
-              <h3 className="text-2xl md:text-4xl font-bold font-display leading-tight">
-                {currentData.headline}
-              </h3>
-              <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
-                {currentData.desc}
-              </p>
-              <div className="pt-4 border-t border-white/5 flex items-center gap-2 text-xs text-[#D4AF37] font-semibold">
-                <span>{currentData.items.length} Active SLA Divisions</span>
-                <ArrowRight className="w-4 h-4" />
-              </div>
-            </div>
+                {/* Header elements */}
+                <div className="relative z-10 flex items-start justify-between w-full">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-colors ${
+                    isActive ? "bg-[#D4AF37]/10 border-[#D4AF37]/35 text-[#D4AF37]" : "bg-white/5 border-white/5 text-gray-400"
+                  }`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  {!isActive && (
+                    <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold rotate-90 origin-right translate-y-6">
+                      {item.shortTitle}
+                    </span>
+                  )}
+                </div>
 
-            {/* Right: Detailed Services Sub-Grid */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-[#D4AF37] scrollbar-track-[#081B33]">
-              {currentData.items.map((item, idx) => {
-                const IconComponent = item.icon;
-                return (
-                  <motion.div
-                    key={idx}
-                    whileHover={{ y: -3 }}
-                    className="p-6 rounded-xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#D4AF37]/30 transition-all duration-300 shadow-md flex gap-4 items-start"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] border border-[#D4AF37]/20 flex-shrink-0">
-                      <IconComponent className="w-5 h-5 stroke-[1.5]" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold font-display text-white">
-                        {item.title}
-                      </h4>
-                      <p className="text-[11px] text-gray-400 font-light leading-relaxed">
+                {/* Content Area */}
+                <div className="relative z-10 space-y-6 mt-auto">
+                  <h3 className="text-xl font-bold font-display uppercase tracking-wider text-white">
+                    {item.title}
+                  </h3>
+
+                  {isActive && (
+                    <motion.div
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="space-y-6"
+                    >
+                      <p className="text-xs text-gray-300 font-light leading-relaxed max-w-xl">
                         {item.desc}
                       </p>
+
+                      {/* Capabilities checklist */}
+                      <div className="grid grid-cols-2 gap-3 pt-2">
+                        {item.features.map((feature, fIdx) => (
+                          <div key={fIdx} className="flex items-center gap-2">
+                            <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                            <span className="text-[10px] text-gray-400 uppercase tracking-wider">
+                              {feature}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Architectural CTA Button */}
+                      <div className="pt-2">
+                        <Link
+                          href={item.href}
+                          onClick={(e) => e.stopPropagation()}
+                          className="group/btn inline-flex flex-col items-start py-1 text-xs font-bold tracking-wider text-white uppercase"
+                        >
+                          <div className="flex items-center gap-1.5 group-hover/btn:text-[#D4AF37] transition-colors duration-300">
+                            <span>Explore {item.shortTitle}</span>
+                            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                          </div>
+                          <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover/btn:bg-[#D4AF37]" />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mobile View: Accordion Layout */}
+        <div className="md:hidden space-y-4">
+          {services.map((item, idx) => {
+            const Icon = item.icon;
+            const isOpen = activeIndex === idx;
+            return (
+              <div
+                key={idx}
+                className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+                  isOpen ? "bg-[#0c223d] border-[#D4AF37]/30 shadow-lg" : "bg-[#0c1f36] border-white/5"
+                }`}
+              >
+                <button
+                  onClick={() => setActiveIndex(isOpen ? -1 : idx)}
+                  className="w-full p-5 flex items-center justify-between text-left cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded flex items-center justify-center border ${
+                      isOpen ? "bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#D4AF37]" : "bg-white/5 border-white/5 text-gray-400"
+                    }`}>
+                      <Icon className="w-4.5 h-4.5" />
                     </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </AnimatePresence>
+                    <span className="text-sm font-bold uppercase tracking-wider text-white font-display">
+                      {item.title}
+                    </span>
+                  </div>
+                  <div>
+                    {isOpen ? <Minus className="w-4 h-4 text-gray-400" /> : <Plus className="w-4 h-4 text-gray-400" />}
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="px-6 pb-6 pt-2 space-y-6">
+                        <p className="text-xs text-gray-300 font-light leading-relaxed">
+                          {item.desc}
+                        </p>
+                        
+                        {/* Features list */}
+                        <div className="space-y-2 border-t border-white/5 pt-4">
+                          {item.features.map((feature, fIdx) => (
+                            <div key={fIdx} className="flex items-center gap-2">
+                              <span className="w-1 h-1 rounded-full bg-[#D4AF37]" />
+                              <span className="text-[10px] text-gray-400 uppercase tracking-widest leading-relaxed">
+                                {feature}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* CTA Link */}
+                        <div className="pt-2">
+                          <Link
+                            href={item.href}
+                            className="group/btn flex items-center justify-between py-3 px-4 border border-white/10 rounded text-xs font-bold tracking-wider text-white uppercase bg-white/5"
+                          >
+                            <span>Explore {item.shortTitle}</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
 
       </div>
     </section>

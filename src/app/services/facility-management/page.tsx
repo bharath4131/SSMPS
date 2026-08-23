@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Droplets, UserPlus, Coffee, Leaf, Building, ChevronRight, ChevronLeft, Loader2, CheckCircle2, Plus, Minus } from "lucide-react";
+import { Settings, Zap, Droplets, UserPlus, Coffee, Building, Loader2, CheckCircle2, AlertCircle, Plus, Minus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import QuoteModal from "@/components/QuoteModal";
 
 type FacilityInquiryValues = {
   organization: string;
@@ -17,145 +16,180 @@ type FacilityInquiryValues = {
   contractTerm: string;
   staffCategory: string;
   notes: string;
+  botField: string;
 };
 
 export default function FacilityManagementServicePage() {
-  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FacilityInquiryValues>();
+  } = useForm<FacilityInquiryValues>({
+    defaultValues: {
+      organization: "",
+      contactName: "",
+      email: "",
+      phone: "",
+      staffCount: "1-3",
+      contractTerm: "Long Term",
+      staffCategory: "Electrician Plumber",
+      notes: "",
+      botField: "",
+    },
+  });
 
   const onSubmit = async (data: FacilityInquiryValues) => {
+    if (data.botField) {
+      setIsSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    reset();
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setIsSubmitted(false);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.contactName,
+          email: data.email,
+          phone: data.phone,
+          company: data.organization,
+          service: "Facility Management",
+          location: "Not Specified",
+          message: `Staff Count: ${data.staffCount}. Term: ${data.contractTerm}. Category: ${data.staffCategory}. Notes: ${data.notes}`,
+          inquirySource: "Facility Page Form",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setIsSubmitted(true);
+        reset();
+      } else {
+        setSubmitError(result.error || "Failed to submit proposal request.");
+      }
+    } catch (err) {
+      setSubmitError("Network error. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const facilityServicesList = [
-    { icon: Zap, title: "Electrical Maintenance", desc: "Outsourced certified building electricians managing grid distribution, panel audits, UPS networks, and immediate utility repair." },
-    { icon: Droplets, title: "Plumbing", desc: "Diagnostic commercial plumbing technicians handling pipe layouts, overhead tanks, water pressure grids, and sanitizing fittings." },
-    { icon: UserPlus, title: "Reception Staff", desc: "Trained corporate front-desk executives, telephone line coordinators, visitor badge printers, and administrative office support." },
-    { icon: Coffee, title: "Pantry Services", desc: "Food safety certified pantry hosts, kitchen server boys, cafeteria inventory handlers, and executive meeting dining staff." },
-    { icon: Leaf, title: "Garden Maintenance", desc: "Experienced horticulturists, gardeners, landscaping coordinators, lawn grooming, lawn weeding, and peripheral garden upkeep." },
-    { icon: Building, title: "Building Maintenance", desc: "General caretakers executing basic carpentry, lock restorations, ceiling grid alignments, and structural inspections." },
+    { 
+      icon: Zap, 
+      title: "Building Electricians", 
+      desc: "Outsourced technicians trained in panel inspections, grid routing safety, and utility monitoring." 
+    },
+    { 
+      icon: Droplets, 
+      title: "Plumbing Support", 
+      desc: "Commercial plumbing maintenance, overhead tank checks, water grid flow reviews, and sanitizing logistics." 
+    },
+    { 
+      icon: UserPlus, 
+      title: "Reception & Admin Hosts", 
+      desc: "Front-desk administrative coordinators managing telephone routing, badge printing, and guest logs." 
+    },
+    { 
+      icon: Coffee, 
+      title: "Pantry Stewards", 
+      desc: "Trained pantry boys and catering stewards to manage boardroom coffee stations and meeting snacks." 
+    },
+    { 
+      icon: Building, 
+      title: "Handyman Caretakers", 
+      desc: "Maintenance supervisors to handle minor carpentry checks, ceiling grid alignments, and structural inspections." 
+    },
   ];
 
-  const facilityProcess = [
-    { title: "Skill Matrix Audit", desc: "We sit with your facility director to analyze technical credentials, license requirements, and shift volumes." },
-    { title: "Candidate Selection", desc: "Candidates matching your required technical profile are chosen from our pre-screened, verified pool." },
-    { title: "Roster Dispatch", desc: "Personnel are dispatched to your site, complete on-site safety inductions, and sync with your facility supervisors." },
-    { title: "Compliance Check", desc: "We verify monthly statutory documents (Provident Fund, ESIC, minimum wage payouts) are fully compiled." },
-    { title: "Periodic Review", desc: "Our contract desk audits attendance logs, reviews crew performance, and updates staff allocation monthly." },
+  const workflowSteps = [
+    { num: "01", step: "Environment", desc: "Understand your layout, electrical load, pantry grids, and visitor densities." },
+    { num: "02", step: "Requirements", desc: "Map required trade certifications (e.g. electricians) and shifts schedule details." },
+    { num: "03", step: "Planning", desc: "Author specialized roster handbooks and safety guidelines for the utility team." },
+    { num: "04", step: "Support", desc: "Deploy the verified crew and coordinate on-site duty log updates." },
+    { num: "05", step: "Continuity", desc: "Our supervisors handle attendance audits and deploy replacements for leaves." },
   ];
 
   const facilityFaqs = [
-    { q: "How do you ensure the technical skills of plumbers and electricians?", a: "Every technical team member deployed holds a valid government-recognized ITI or equivalent trade certification. They undergo practical skill tests at our regional training yard before deployment." },
-    { q: "What statutory compliances do you provide with monthly billing?", a: "We provide complete statutory receipts. This includes PF (Provident Fund) challans, ESIC (Employee State Insurance) returns, ECR logs, and professional tax receipts corresponding to the workers assigned to your site." },
-    { q: "What happens if a deployed staff member is not performing up to mark?", a: "If a candidate is found unsuitable or performs below expectation, you can request a replacement. We will review the post requirements and deploy a replacement within 48 hours." },
+    { 
+      q: "What certifications do your technicians hold?", 
+      a: "All deployed electricians and technical plumbers hold valid trade credentials or trade-school diplomas (ITI) and undergo site safety drill checkouts." 
+    },
+    { 
+      q: "Do you cover statutory compliance receipts?", 
+      a: "Yes. All monthly invoices are delivered alongside statutory ESIC, PF minimum wage payments, and GST compliance challan logs." 
+    },
+    { 
+      q: "How fast can you replace absent utility personnel?", 
+      a: "We maintain reserve candidates in our database. Absent staff alerts trigger our coordinator, who dispatches a qualified replacement within 24 hours." 
+    },
   ];
 
   return (
     <>
-      <Navbar onOpenQuote={() => setIsQuoteOpen(true)} />
+      <Navbar />
 
-      <main className="bg-[#081B33] text-white min-h-screen pt-24">
+      <main className="bg-white text-[#081B33] min-h-screen pt-24">
         
         {/* Service Hero Banner */}
-        <section className="relative py-24 md:py-32 overflow-hidden border-b border-white/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,95,0.3)_0%,#081B33_90%)] z-0" />
+        <section className="relative py-24 md:py-32 overflow-hidden bg-[#F7F9FC] border-b border-[#081B33]/5">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,95,0.05)_0%,#F7F9FC_90%)] z-0" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#D4AF37]/30 bg-[#081B33]/60 backdrop-blur-md">
-              <Building className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
-                Facility Management & Manpower
-              </span>
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C41E3A]/20 bg-[#C41E3A]/5 text-[#C41E3A] text-[10px] font-bold uppercase tracking-widest">
+              <Settings className="w-4 h-4 text-[#C41E3A]" />
+              <span>Facility Management Division</span>
             </span>
-            <h1 className="text-4xl md:text-6xl font-black font-display tracking-tight text-white leading-tight">
-              Seamless Utility Staffing.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FCF6BA] gold-text-glow">
-                SLA-Backed Performance.
-              </span>
+            <h1 className="text-4xl md:text-6xl font-extrabold font-display tracking-tight text-[#081B33] leading-tight uppercase">
+              Better Facilities Require <br />
+              Better Coordination.
             </h1>
-            <p className="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              We resolve your operational support vacancies, providing certified electricians, plumbers, reception administrators, and pantry servers on flexible corporate contracts in Hyderabad.
+            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+            <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
+              We provide outsourced utility staff, certified technicians, and administrative support on flexible corporate contracts.
             </p>
           </div>
         </section>
 
-        {/* Detailed Service Directory */}
-        <section className="py-24 md:py-32 bg-white text-[#081B33]">
+        {/* Workflow Visual System Diagram */}
+        <section className="py-20 bg-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-                Service Catalog
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                Visual Workflow System
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-[#081B33]">
-                6 Core Facility Management Divisions.
+              <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
+                Facility Coordination Loop
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {facilityServicesList.map((srv, idx) => {
-                const Icon = srv.icon;
-                return (
-                  <motion.div
-                    key={idx}
-                    whileHover={{ y: -5 }}
-                    className="p-8 rounded-2xl border border-gray-100 bg-[#F7F9FC] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between min-h-[220px]"
-                  >
-                    <div className="space-y-4">
-                      <div className="w-10 h-10 rounded-lg bg-[#081B33] text-[#D4AF37] flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-5 h-5 stroke-[1.5]" />
-                      </div>
-                      <h3 className="text-base font-bold font-display text-[#081B33]">
-                        {srv.title}
-                      </h3>
-                      <p className="text-xs text-gray-600 font-light leading-relaxed">
-                        {srv.desc}
-                      </p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
+              {/* Horizontal line for desktop blueprint look */}
+              <div className="absolute top-[28px] left-0 right-0 h-[1px] bg-gray-100 -z-10 hidden md:block" />
 
-        {/* Operational Process Timeline */}
-        <section className="py-24 md:py-32 bg-[#F7F9FC] text-[#081B33] border-t border-gray-100">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-                Outsourcing SOP
-              </span>
-              <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-[#081B33]">
-                Manpower Recruitment Roadmap.
-              </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-              {facilityProcess.map((step, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative space-y-4">
-                  <div className="absolute top-4 right-4 text-4xl font-extrabold text-[#D4AF37]/15">
-                    0{idx + 1}
+              {workflowSteps.map((ws, idx) => (
+                <div key={idx} className="bg-[#F7F9FC] p-6 rounded-2xl border border-gray-100 space-y-3 shadow-sm relative">
+                  <div className="w-8 h-8 rounded-full bg-[#081B33] text-white flex items-center justify-center text-xs font-bold font-display">
+                    {ws.num}
                   </div>
-                  <h3 className="text-sm font-bold font-display text-[#081B33] pr-8">
-                    {step.title}
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#081B33] font-display pt-2">
+                    {ws.step}
                   </h3>
-                  <p className="text-[11px] text-gray-500 font-light leading-relaxed">
-                    {step.desc}
+                  <p className="text-[10px] text-gray-500 font-light leading-relaxed">
+                    {ws.desc}
                   </p>
                 </div>
               ))}
@@ -163,61 +197,125 @@ export default function FacilityManagementServicePage() {
           </div>
         </section>
 
-        {/* Sector-Specific Quote Builder Form */}
-        <section className="py-24 md:py-32 bg-[#081B33] text-white">
+        {/* Detailed Service Directory */}
+        <section className="py-24 bg-[#F7F9FC] border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                Capabilities
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
+                Utility Staffing Catalog
+              </h2>
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {facilityServicesList.map((srv, idx) => {
+                const Icon = srv.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="p-8 rounded-2xl border border-gray-100 bg-white flex flex-col justify-between min-h-[220px]"
+                  >
+                    <div className="space-y-4">
+                      <div className="w-10 h-10 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-5 h-5 stroke-[1.5]" />
+                      </div>
+                      <h3 className="text-base font-bold font-display text-[#081B33] uppercase tracking-wider">
+                        {srv.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 font-light leading-relaxed">
+                        {srv.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Inquiry Builder Form */}
+        <section className="py-24 bg-[#081B33] text-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
             
             {/* Info Column */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
               <div className="space-y-6">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
-                  Instant Bid Request
+                  Proposal Desk
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-white leading-tight">
-                  Request Utility Staff.
+                <h2 className="text-3xl font-bold font-display tracking-tight text-white uppercase leading-none">
+                  Request Facility Proposal.
                 </h2>
                 <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
-                  Enter your utility staffing needs below. Our contract desk supervisor will formulate a compliant manpower proposal.
+                  Enter your utility support requirements and roster intervals below. Our contract desk supervisor will formulate a proposal.
                 </p>
               </div>
 
               <div className="p-6 rounded-2xl border border-white/5 bg-[#1E3A5F]/15 text-xs text-gray-300 leading-relaxed">
-                <strong>Statutory Assurance:</strong> SSMPS assumes full employer liabilities including worker insurance, professional certifications, and compliant ESIC registration.
+                <strong>Statutory Compliance:</strong> We verify all workers assigned are registered in state labor department databases, ESIC, and PF channels.
               </div>
             </div>
 
             {/* Form Column */}
-            <div className="lg:col-span-7 glass-card-gold p-8 md:p-10 rounded-2xl border border-white/5 shadow-2xl bg-[#1E3A5F]/10">
-              {isSubmitted && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center gap-3 text-green-300 text-xs font-semibold"
-                >
-                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                  <span>Facility proposal request received. We will contact you shortly!</span>
-                </motion.div>
-              )}
+            <div className="lg:col-span-7 p-8 md:p-10 rounded-2xl border border-white/5 bg-[#1E3A5F]/5 shadow-2xl">
+              
+              <AnimatePresence mode="wait">
+                {isSubmitted && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/35 flex items-center gap-3 text-green-400 text-xs"
+                  >
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                    <span>Facility proposal request submitted. Our coordinator will contact your representative.</span>
+                  </motion.div>
+                )}
+
+                {submitError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/35 flex items-center gap-3 text-red-400 text-xs"
+                  >
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <span>{submitError}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {/* Honeypot */}
+                <div className="hidden" aria-hidden="true">
+                  <input type="text" tabIndex={-1} {...register("botField")} />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Company / Organization *</label>
+                    <label htmlFor="organization" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Company / Organization *</label>
                     <input
+                      id="organization"
                       type="text"
+                      aria-invalid={errors.organization ? "true" : "false"}
+                      {...register("organization", { required: "Organization is required" })}
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                       placeholder="Company"
-                      {...register("organization", { required: "Organization name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     />
                     {errors.organization && <p className="text-[10px] text-red-400 mt-1">{errors.organization.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contact Person Name *</label>
+                    <label htmlFor="contactName" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contact Person Name *</label>
                     <input
+                      id="contactName"
                       type="text"
-                      placeholder="Name"
+                      aria-invalid={errors.contactName ? "true" : "false"}
                       {...register("contactName", { required: "Contact name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="Name"
                     />
                     {errors.contactName && <p className="text-[10px] text-red-400 mt-1">{errors.contactName.message}</p>}
                   </div>
@@ -225,22 +323,26 @@ export default function FacilityManagementServicePage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Email *</label>
+                    <label htmlFor="email" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Email *</label>
                     <input
+                      id="email"
                       type="email"
-                      placeholder="name@company.com"
+                      aria-invalid={errors.email ? "true" : "false"}
                       {...register("email", { required: "Email is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="name@company.com"
                     />
                     {errors.email && <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Phone *</label>
+                    <label htmlFor="phone" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Phone *</label>
                     <input
+                      id="phone"
                       type="tel"
-                      placeholder="9002570891"
+                      aria-invalid={errors.phone ? "true" : "false"}
                       {...register("phone", { required: "Phone is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="e.g. 9002570891"
                     />
                     {errors.phone && <p className="text-[10px] text-red-400 mt-1">{errors.phone.message}</p>}
                   </div>
@@ -248,10 +350,11 @@ export default function FacilityManagementServicePage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Staff Required</label>
+                    <label htmlFor="staffCount" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Staff Required</label>
                     <select
+                      id="staffCount"
                       {...register("staffCount")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     >
                       <option value="1-3">1 - 3 Persons</option>
                       <option value="4-10">4 - 10 Persons</option>
@@ -259,49 +362,50 @@ export default function FacilityManagementServicePage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contract Term</label>
+                    <label htmlFor="contractTerm" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contract Term</label>
                     <select
+                      id="contractTerm"
                       {...register("contractTerm")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     >
                       <option value="Long Term">Long-Term Contract</option>
-                      <option value="Short Term Project">Short-Term (Project)</option>
-                      <option value="Temporary Support">Temporary Support</option>
+                      <option value="Short Term Project">Short-Term Project</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Staff Category</label>
+                    <label htmlFor="staffCategory" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Staff Category</label>
                     <select
+                      id="staffCategory"
                       {...register("staffCategory")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     >
                       <option value="Electrician Plumber">Electrician / Plumber</option>
                       <option value="Reception Admin">Reception / Admin</option>
-                      <option value="Pantry Host">Pantry Server</option>
-                      <option value="Gardener Handyman">Gardener / Handyman</option>
+                      <option value="Pantry Host">Pantry Steward</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Roster Details / Notes</label>
+                  <label htmlFor="notes" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Site Details / Notes</label>
                   <textarea
+                    id="notes"
                     rows={3}
-                    placeholder="Describe specific work schedules, certifications required (e.g. electrical licenses), or shift allocations..."
+                    placeholder="Describe specific work schedules, technical trade license certifications required, etc..."
                     {...register("notes")}
-                    className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
+                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs tracking-wider uppercase rounded-lg shadow-lg shadow-[#D4AF37]/20 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Submitting Proposal Request...</span>
+                      <span>Processing Request...</span>
                     </>
                   ) : (
                     <span>Submit Proposal Request</span>
@@ -313,28 +417,28 @@ export default function FacilityManagementServicePage() {
         </section>
 
         {/* FAQs Accordion */}
-        <section className="py-24 md:py-32 bg-[#F7F9FC] text-[#081B33]">
+        <section className="py-24 bg-white text-[#081B33]">
           <div className="max-w-3xl mx-auto px-6 md:px-8">
-            <div className="text-center space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
-                Facility FAQ
+            <div className="text-center space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                FAQ
               </span>
-              <h2 className="text-3xl font-bold font-display tracking-tight text-[#081B33]">
-                Facility Staffing Inquiries.
+              <h2 className="text-2xl sm:text-3xl font-bold font-display text-[#081B33] uppercase">
+                Common Questions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
             </div>
 
             <div className="space-y-4">
               {facilityFaqs.map((faq, idx) => {
                 const isOpen = openFaq === idx;
                 return (
-                  <div key={idx} className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+                  <div key={idx} className="bg-[#F7F9FC] border border-gray-100 rounded-xl overflow-hidden shadow-sm">
                     <button
                       onClick={() => setOpenFaq(isOpen ? null : idx)}
                       className="w-full py-5 px-6 md:px-8 flex items-center justify-between text-left hover:bg-gray-50/50 transition-colors cursor-pointer"
                     >
-                      <span className="text-sm md:text-base font-bold font-display text-[#081B33]">{faq.q}</span>
+                      <span className="text-sm md:text-base font-bold font-display text-[#081B33] uppercase tracking-wider">{faq.q}</span>
                       <div className={`w-8 h-8 rounded-lg bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#081B33] text-white" : ""}`}>
                         {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                       </div>
@@ -348,7 +452,7 @@ export default function FacilityManagementServicePage() {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <div className="pb-6 px-6 md:px-8 text-xs md:text-sm text-gray-500 leading-relaxed font-light border-t border-gray-50 pt-4">
+                          <div className="pb-6 px-6 md:px-8 text-xs md:text-sm text-gray-500 leading-relaxed font-light border-t border-gray-150 pt-4">
                             {faq.a}
                           </div>
                         </motion.div>
@@ -364,8 +468,6 @@ export default function FacilityManagementServicePage() {
       </main>
 
       <Footer />
-
-      <QuoteModal isOpen={isQuoteOpen} onClose={() => setIsQuoteOpen(false)} />
     </>
   );
 }

@@ -1,108 +1,257 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Menu, X, ShieldAlert, PhoneCall } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 interface NavbarProps {
-  onOpenQuote: () => void;
+  onOpenQuote?: () => void;
 }
 
 export default function Navbar({ onOpenQuote }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Industries", href: "#industries" },
-    { name: "Clients", href: "#clients" },
-    { name: "Gallery", href: "#gallery" },
-    { name: "FAQ", href: "#faq" },
-    { name: "Contact", href: "#contact" },
+  // Handle Escape key to close menus
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+        setIsMegaMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Body scroll lock on mobile menu open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  // Trap focus inside mobile menu drawer
+  useEffect(() => {
+    if (!isMobileMenuOpen || !mobileMenuRef.current) return;
+
+    const focusableElements = mobileMenuRef.current.querySelectorAll(
+      'a[href], button, textarea, input, select, [tabindex="0"]'
+    );
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+    const handleTabTrap = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleTabTrap);
+    firstElement?.focus();
+
+    return () => window.removeEventListener("keydown", handleTabTrap);
+  }, [isMobileMenuOpen]);
+
+  const capabilities = [
+    {
+      name: "Security Services",
+      href: "/services/security",
+      desc: "Trained personnel, operations supervision, and corporate guard deployments.",
+    },
+    {
+      name: "Housekeeping Services",
+      href: "/services/housekeeping",
+      desc: "Commercial cleaning, deep sanitization, and structured workspace maintenance.",
+    },
+    {
+      name: "Facility Management",
+      href: "/services/facility-management",
+      desc: "Utility staffing, outsourced technicians, and full building support coordination.",
+    },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? "bg-[#081B33]/90 backdrop-blur-md border-b border-[#D4AF37]/20 py-4 shadow-lg shadow-black/10"
+            ? "bg-[#081B33]/95 backdrop-blur-md border-b border-white/5 py-4 shadow-lg shadow-black/10"
             : "bg-transparent py-6 border-b border-white/5"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#home" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-[#D4AF37] to-[#AA771C] rounded-lg shadow-md shadow-[#D4AF37]/20 group-hover:scale-105 transition-transform duration-300">
-              <ShieldAlert className="w-6 h-6 text-[#081B33] stroke-[2]" />
+          
+          {/* Official Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative w-10 h-10 flex-shrink-0 transition-transform duration-300 group-hover:scale-102">
+              <Image
+                src="/logo.png"
+                alt="SSMPS Logo"
+                fill
+                priority
+                className="object-contain"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold font-display tracking-wider text-white group-hover:text-[#D4AF37] transition-colors duration-300">
+              <span className="text-lg font-bold font-display tracking-wider text-white group-hover:text-[#D4AF37] transition-colors duration-300 uppercase">
                 SSMPS
               </span>
-              <span className="text-[9px] font-medium tracking-[0.2em] text-[#D4AF37] uppercase -mt-1">
+              <span className="text-[8px] font-medium tracking-[0.25em] text-[#D4AF37] uppercase -mt-1.5">
                 Manpower solutions
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="relative text-sm font-medium tracking-wide text-gray-300 hover:text-white transition-colors duration-300 py-1"
+            <Link
+              href="/about"
+              className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
+                pathname === "/about" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              About
+            </Link>
+
+            {/* Capabilities Dropdown (Mega-Menu trigger) */}
+            <div
+              className="relative"
+              onMouseEnter={() => setIsMegaMenuOpen(true)}
+              onMouseLeave={() => setIsMegaMenuOpen(false)}
+            >
+              <button
+                ref={triggerRef}
+                className={`text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors duration-300 cursor-pointer ${
+                  pathname.startsWith("/services") ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+                }`}
+                aria-expanded={isMegaMenuOpen}
+                aria-haspopup="true"
               >
-                {link.name}
-                {/* Custom Hover Border Effect */}
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#D4AF37] transition-all duration-300 hover-trigger" />
-              </a>
-            ))}
+                Capabilities
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isMegaMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {isMegaMenuOpen && (
+                  <motion.div
+                    initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-80 bg-[#081B33] border border-white/10 rounded-lg p-5 shadow-2xl z-50"
+                  >
+                    <div className="space-y-4">
+                      <div className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-widest border-b border-white/5 pb-2">
+                        Service Divisions
+                      </div>
+                      <div className="flex flex-col gap-3">
+                        {capabilities.map((item) => (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            className="group/item flex flex-col p-2.5 rounded hover:bg-white/5 transition-colors"
+                          >
+                            <span className="text-xs font-bold text-white group-hover/item:text-[#D4AF37] transition-colors">
+                              {item.name}
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-light mt-0.5 leading-relaxed">
+                              {item.desc}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link
+              href="/industries"
+              className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
+                pathname === "/industries" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              Industries
+            </Link>
+
+            <Link
+              href="/our-approach"
+              className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
+                pathname === "/our-approach" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              Our Approach
+            </Link>
+
+            <Link
+              href="/contact"
+              className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
+                pathname === "/contact" ? "text-[#D4AF37]" : "text-gray-300 hover:text-white"
+              }`}
+            >
+              Contact
+            </Link>
           </nav>
 
-          {/* Right CTA Area */}
-          <div className="hidden lg:flex items-center gap-6">
-            <a
-              href="tel:9002570891"
-              className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-[#D4AF37] transition-colors duration-300"
+          {/* Architectural CTA Button */}
+          <div className="hidden lg:flex items-center">
+            <Link
+              href="/request-proposal"
+              className="group flex flex-col items-end py-1 text-xs font-bold tracking-wider text-white uppercase"
             >
-              <PhoneCall className="w-4 h-4 text-[#D4AF37]" />
-              <span>9002570891</span>
-            </a>
-            <button
-              onClick={onOpenQuote}
-              className="relative px-6 py-2.5 text-xs font-bold tracking-wider text-white uppercase overflow-hidden border border-[#D4AF37] rounded-md transition-all duration-500 shadow-md hover:shadow-[#D4AF37]/25 hover:bg-[#D4AF37] hover:text-[#081B33] group"
-            >
-              <span className="relative z-10">Get Quote</span>
-              <span className="absolute inset-0 bg-[#D4AF37] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out -z-0" />
-            </button>
+              <div className="flex items-center gap-1.5 group-hover:text-[#D4AF37] transition-colors duration-300">
+                <span>Request a Proposal</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </div>
+              <span className="w-full h-[1px] bg-white/20 mt-1 transition-all duration-300 group-hover:bg-[#D4AF37] group-hover:w-full" />
+            </Link>
           </div>
 
           {/* Mobile Menu Toggler */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden text-white hover:text-[#D4AF37] transition-colors duration-300"
+            className="lg:hidden text-white hover:text-[#D4AF37] transition-colors duration-300 cursor-pointer"
             aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? (
-              <X className="w-7 h-7" />
+              <X className="w-6 h-6" />
             ) : (
-              <Menu className="w-7 h-7" />
+              <Menu className="w-6 h-6" />
             )}
           </button>
         </div>
@@ -112,42 +261,73 @@ export default function Navbar({ onOpenQuote }: NavbarProps) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 lg:hidden bg-[#081B33]/98 backdrop-blur-lg pt-24 px-8 pb-12 flex flex-col justify-between"
+            ref={mobileMenuRef}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-40 lg:hidden bg-[#081B33] pt-28 px-8 pb-12 flex flex-col justify-between"
           >
-            <nav className="flex flex-col gap-6 text-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium tracking-wide text-gray-200 hover:text-[#D4AF37] transition-colors duration-300"
-                >
-                  {link.name}
-                </a>
-              ))}
+            <nav className="flex flex-col gap-6 text-left">
+              <Link
+                href="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+              >
+                About
+              </Link>
+
+              <div className="space-y-4">
+                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block border-b border-white/5 pb-2">
+                  Capabilities
+                </span>
+                <div className="flex flex-col gap-4 pl-2">
+                  {capabilities.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-md font-bold uppercase tracking-wider text-gray-200 hover:text-[#D4AF37] transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                href="/industries"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+              >
+                Industries
+              </Link>
+
+              <Link
+                href="/our-approach"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+              >
+                Our Approach
+              </Link>
+
+              <Link
+                href="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-bold uppercase tracking-wider text-white hover:text-[#D4AF37] transition-colors"
+              >
+                Contact
+              </Link>
             </nav>
 
-            <div className="flex flex-col items-center gap-6 border-t border-white/10 pt-8">
-              <a
-                href="tel:9002570891"
-                className="flex items-center gap-2 text-md font-medium text-gray-300 hover:text-[#D4AF37]"
+            <div className="flex flex-col items-stretch border-t border-white/10 pt-8">
+              <Link
+                href="/request-proposal"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-4 text-center text-xs font-bold tracking-wider text-[#081B33] bg-[#D4AF37] hover:bg-[#AA771C] rounded shadow-lg uppercase transition-colors"
               >
-                <PhoneCall className="w-5 h-5 text-[#D4AF37]" />
-                <span>9002570891</span>
-              </a>
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onOpenQuote();
-                }}
-                className="w-full py-4 text-sm font-bold tracking-wider text-[#081B33] bg-[#D4AF37] rounded-md shadow-lg shadow-[#D4AF37]/20 uppercase transition-all duration-300 active:scale-95"
-              >
-                Get Quote
-              </button>
+                Request a Proposal
+              </Link>
             </div>
           </motion.div>
         )}

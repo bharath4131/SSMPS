@@ -1,23 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import BrandArrival from "@/components/BrandArrival";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ClientMarquee from "@/components/ClientMarquee";
-import About from "@/components/About";
+import Responsibility from "@/components/Responsibility";
 import Services from "@/components/Services";
-import WhyChooseUs from "@/components/WhyChooseUs";
+import DarkToLight from "@/components/DarkToLight";
+import SSMPSStandard from "@/components/SSMPSStandard";
+import RealPeople from "@/components/RealPeople";
+import ProcessTimeline from "@/components/ProcessTimeline";
 import Industries from "@/components/Industries";
 import Stats from "@/components/Stats";
-import ProcessTimeline from "@/components/ProcessTimeline";
-import Gallery from "@/components/Gallery";
-import Testimonials from "@/components/Testimonials";
-import FAQ from "@/components/FAQ";
+import RegionalPresence from "@/components/RegionalPresence";
+import BrandCommitment from "@/components/BrandCommitment";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import QuoteModal from "@/components/QuoteModal";
 
 export default function Home() {
+  const [isArrivalComplete, setIsArrivalComplete] = useState(false);
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
 
   const handleOpenQuote = () => {
@@ -30,52 +32,62 @@ export default function Home() {
 
   return (
     <>
-      {/* Sticky Premium Navbar */}
-      <Navbar onOpenQuote={handleOpenQuote} />
+      {/* SECTION 0 — Brand Arrival Splash */}
+      <BrandArrival onComplete={() => setIsArrivalComplete(true)} />
 
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <Hero onOpenQuote={handleOpenQuote} />
+      {/* Main Page Content (visible and interactive after arrival completes) */}
+      <div className={`transition-opacity duration-500 ${isArrivalComplete ? "opacity-100" : "opacity-0 h-screen overflow-hidden"}`}>
+        
+        {/* Sticky Premium Navbar */}
+        <Navbar onOpenQuote={handleOpenQuote} />
 
-        {/* Clients Infinite Scroll Marquee */}
-        <ClientMarquee />
+        <main className="flex-grow">
+          {/* ACT 1: DARK */}
+          {/* SECTION 1 — Hero */}
+          <Hero onOpenQuote={handleOpenQuote} />
 
-        {/* About Company Split Section */}
-        <About />
+          {/* SECTION 2 — Responsibility Statement */}
+          <Responsibility />
 
-        {/* Services Tabbed Section */}
-        <Services />
+          {/* SECTION 3 — Capabilities expands */}
+          <Services />
 
-        {/* Why Choose Us Trust Section */}
-        <WhyChooseUs />
+          {/* ACT 2: LIGHT */}
+          {/* SECTION 4 — Dark-to-Light Transition */}
+          <DarkToLight />
 
-        {/* Statistics Counting Section */}
-        <Stats />
+          {/* SECTION 5 — The SSMPS Standard chapters */}
+          <SSMPSStandard />
 
-        {/* Industries Served Grid */}
-        <Industries />
+          {/* SECTION 6 — Real People Image composition */}
+          <RealPeople />
 
-        {/* Process Timeline Track Section */}
-        <ProcessTimeline />
+          {/* SECTION 7 — Operational Path roadmap */}
+          <ProcessTimeline />
 
-        {/* Masonry Actions Gallery */}
-        <Gallery />
+          {/* SECTION 8 — Industries grid */}
+          <Industries />
 
-        {/* Testimonials Slider Section */}
-        <Testimonials />
+          {/* SECTION 9 — Credibility stat block */}
+          <Stats />
 
-        {/* FAQ Accordion Section */}
-        <FAQ />
+          {/* SECTION 10 — Regional SVG map */}
+          <RegionalPresence />
 
-        {/* Contact Form & Hyderabad Map */}
-        <Contact />
-      </main>
+          {/* ACT 3: DARK */}
+          {/* SECTION 11 — Brand Commitment block */}
+          <BrandCommitment />
 
-      {/* Global Footer */}
-      <Footer />
+          {/* SECTION 12 — Smart Inquiry adapt form */}
+          <Contact />
+        </main>
 
-      {/* Luxury Proposal Modal */}
-      <QuoteModal isOpen={isQuoteOpen} onClose={handleCloseQuote} />
+        {/* SECTION 13 — Structured Footer */}
+        <Footer />
+
+        {/* Request proposal modal */}
+        <QuoteModal isOpen={isQuoteOpen} onClose={handleCloseQuote} />
+      </div>
     </>
   );
 }

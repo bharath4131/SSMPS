@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Briefcase, Home, Hospital, Store, HardHat, Layers, Brush, Wrench, Bath, ChevronRight, ChevronLeft, Loader2, CheckCircle2, Plus, Minus } from "lucide-react";
+import { Sparkles, Briefcase, Building, Layers, Brush, Wrench, Bath, Loader2, CheckCircle2, AlertCircle, Plus, Minus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import QuoteModal from "@/components/QuoteModal";
 
 type HousekeepingInquiryValues = {
   organization: string;
@@ -17,119 +16,191 @@ type HousekeepingInquiryValues = {
   frequency: string;
   propertyType: string;
   notes: string;
+  botField: string;
 };
 
 export default function HousekeepingServicePage() {
-  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<HousekeepingInquiryValues>();
+  } = useForm<HousekeepingInquiryValues>({
+    defaultValues: {
+      organization: "",
+      contactName: "",
+      email: "",
+      phone: "",
+      facilitySize: "",
+      frequency: "Daily Routine",
+      propertyType: "Office Corporate",
+      notes: "",
+      botField: "",
+    },
+  });
 
   const onSubmit = async (data: HousekeepingInquiryValues) => {
+    if (data.botField) {
+      setIsSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    reset();
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setIsSubmitted(false);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.contactName,
+          email: data.email,
+          phone: data.phone,
+          company: data.organization,
+          service: "Housekeeping Services",
+          location: "Not Specified",
+          message: `Facility Size: ${data.facilitySize}. Frequency: ${data.frequency}. Property Type: ${data.propertyType}. Notes: ${data.notes}`,
+          inquirySource: "Housekeeping Page Form",
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setIsSubmitted(true);
+        reset();
+      } else {
+        setSubmitError(result.error || "Failed to submit proposal request.");
+      }
+    } catch (err) {
+      setSubmitError("Network error. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const housekeepingServicesList = [
-    { icon: Briefcase, title: "Office Housekeeping", desc: "Pristine desk cleaning, conference room sanitization, trash clearance, floor vacuuming, and daily corporate workspace maintenance." },
-    { icon: Home, title: "Residential Housekeeping", desc: "Detailed room sweeping, kitchen cleaning, sanitization of surface areas, and domestic clean routines for gated enclaves." },
-    { icon: Hospital, title: "Hospital Housekeeping", desc: "SOP-driven medical-grade disinfection, sanitizing ICU/surgical corridors, waste separation, and infection control compliance." },
-    { icon: Store, title: "Mall Housekeeping", desc: "Continuous sanitation of food courts, heavy floor sweeping utilizing scrubber dryers, glass partition clearing, and washrooms upkeep." },
-    { icon: HardHat, title: "Industrial Cleaning", desc: "Chemical grease removal from factory floors, warehouse dust control, utility area washing, and plant safety cleaning." },
-    { icon: Sparkles, title: "Deep Cleaning", desc: "Seasonal deep scrubbing, high-pressure steam cleaning, sanitization of upholstery, and detailing of corners." },
-    { icon: Layers, title: "Glass Cleaning", desc: "Certified high-rise exterior facade washing, window streak removals, and structural partition frame cleaning." },
-    { icon: Brush, title: "Carpet Cleaning", desc: "Industrial dry-foam carpet cleaning, stain removal audits, fabric deodorizing, and deep dirt extraction." },
-    { icon: Wrench, title: "Floor Maintenance", desc: "Diamond-grit marble polishing, stone restoration, wood floor waxing, tile scrub routines, and joint filling." },
-    { icon: Bath, title: "Washroom Maintenance", desc: "Hourly washroom sanitizing checklists, plumbing scale removal, deodorizing dispensers refilling, and mirror cleaning." },
+    { 
+      icon: Briefcase, 
+      title: "Office Housekeeping", 
+      desc: "Desk dusting, conference room sanitization, waste separation, and general daily workspace maintenance." 
+    },
+    { 
+      icon: Layers, 
+      title: "Glass & Window Cleaning", 
+      desc: "Access-safe window washing, streak removals, and structural glass facade partition detailing." 
+    },
+    { 
+      icon: Brush, 
+      title: "Carpet Care & Scrubbing", 
+      desc: "Vacuuming cycles, stain spot cleanups, fabric freshening, and deep dirt extraction." 
+    },
+    { 
+      icon: Wrench, 
+      title: "Floor Maintenance", 
+      desc: "Marble restoration, diamond-grit floor scrubbing, tile polishings, and grout joint care." 
+    },
+    { 
+      icon: Bath, 
+      title: "Sanitary Station Upkeep", 
+      desc: "Hourly restroom cleanliness checks, dispenser refilling, scale clearing, and deodorization protocols." 
+    },
+    { 
+      icon: Building, 
+      title: "Common Area Hygiene", 
+      desc: "Lobby floor moppings, elevator panels wipe downs, railing sanitizing, and reception tidiness." 
+    },
   ];
 
   const housekeepingProcess = [
-    { title: "Site Walkthrough", desc: "We inspect layout setups, floor tiles composition, facade height access, and washroom volumes to calculate resource allocation." },
-    { title: "Chemical Selection", desc: "We map certified eco-friendly Diversey/Taski cleaning solutions and compile safety MSDS logs to be housed on site." },
-    { title: "Schedule Setup", desc: "We draft granular hourly, daily, and weekly cleaning checklists detailing post duties for the housekeeping crew." },
-    { title: "Checklist Audits", desc: "Housekeeping supervisors execute random audit scorecards, checking desk mirrors, floor shine, and washroom hygiene." },
-    { title: "Quality Rating", desc: "We conduct monthly client reviews to score housekeeping performance and calibrate schedules based on seasonal needs." },
+    { title: "Walkthrough", desc: "Inspect facility square footage, tile materials, window access, and high-traffic zone densities." },
+    { title: "Material Setup", desc: "Map professional non-toxic cleaning agents, compile MSDS safety checkouts, and align gear." },
+    { title: "Schedule SOP", desc: "Draw granular hourly/weekly checklists detailing post logs and shift timings." },
+    { title: "Supervisor Check", desc: "Supervisors execute audit checklist scorecards verifying cleaning detail quality." },
+    { title: "Calibrate Roster", desc: "Conduct routine client meetings to adjust staffing frequencies based on seasonal footfall." },
   ];
 
   const housekeepingFaqs = [
-    { q: "What cleaning chemicals and equipment do you use?", a: "We use professional-grade eco-friendly cleaning chemicals from certified brands like Diversey (e.g., Taski R1 to R6 series). Our equipment includes heavy-duty floor scrubbers, vacuum extractors, high-pressure wash jets, and streak-free squeegees." },
-    { q: "Are your housekeeping staff certified and trained in hygiene?", a: "Yes. All housekeeping executives undergo a 3-day training module covering chemical dilution ratios, cross-contamination prevention, high-altitude facade safety, and customer hospitality." },
-    { q: "Do you supply the consumables (handwash, paper towels)?", a: "We offer both options. We can supply standard bathroom consumables (toilet rolls, handwash liquid, sanitizers) as part of a monthly contract bundle, or work with inventory supplied by client." },
+    { 
+      q: "What types of cleaning agents and tools do you use?", 
+      a: "We deploy eco-friendly, biodegradable commercial cleaning solutions. Our teams are equipped with heavy-duty vacuum extractors, microfiber cloths, and streak-free window squeegees." 
+    },
+    { 
+      q: "Are the housekeeping staff background verified?", 
+      a: "Yes. Every staff candidate is verified through local police address checkouts and national identity databases before on-site deployment." 
+    },
+    { 
+      q: "Can you supply the pantry consumables?", 
+      a: "We offer both options: we can manage and supply restroom soap, tissue rolls, and paper towels under the monthly agreement, or clean utilizing your stock." 
+    },
   ];
 
   return (
     <>
-      <Navbar onOpenQuote={() => setIsQuoteOpen(true)} />
+      <Navbar />
 
-      <main className="bg-[#081B33] text-white min-h-screen pt-24">
+      <main className="bg-white text-[#081B33] min-h-screen pt-24">
         
         {/* Service Hero Banner */}
-        <section className="relative py-24 md:py-32 overflow-hidden border-b border-white/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,95,0.3)_0%,#081B33_90%)] z-0" />
+        <section className="relative py-24 md:py-32 overflow-hidden bg-[#F7F9FC] border-b border-[#081B33]/5">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.05)_0%,#F7F9FC_90%)] z-0" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 text-center space-y-6">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#D4AF37]/30 bg-[#081B33]/60 backdrop-blur-md">
-              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-              <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
-                Premium Housekeeping Division
-              </span>
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C41E3A]/20 bg-[#C41E3A]/5 text-[#C41E3A] text-[10px] font-bold uppercase tracking-widest">
+              <Sparkles className="w-4 h-4 text-[#C41E3A]" />
+              <span>Housekeeping Services</span>
             </span>
-            <h1 className="text-4xl md:text-6xl font-black font-display tracking-tight text-white leading-tight">
-              Pristine Operations.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FCF6BA] gold-text-glow">
-                Clinical Hygiene.
-              </span>
+            <h1 className="text-4xl md:text-6xl font-extrabold font-display tracking-tight text-[#081B33] leading-tight uppercase">
+              Clean Environments. <br />
+              Consistent Standards.
             </h1>
-            <p className="text-xs md:text-sm text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
-              We deploy certified cleaning executives, advanced floor maintaining scrubbers, and Diversey chemical guidelines to preserve hygiene standards across IT parks, malls, and healthcare sectors.
+            <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+            <p className="text-xs md:text-sm text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
+              We deploy trained housekeeping executives, certified cleaning supplies, and detailed checklists to maintain hygienic B2B spaces.
             </p>
           </div>
         </section>
 
         {/* Detailed Service Directory */}
-        <section className="py-24 md:py-32 bg-white text-[#081B33]">
+        <section className="py-24 bg-white border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-                Service Catalog
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                Capabilities
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-[#081B33]">
-                10 Housekeeping Specializations.
+              <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
+                Hygiene Solutions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {housekeepingServicesList.map((srv, idx) => {
                 const Icon = srv.icon;
                 return (
-                  <motion.div
+                  <div
                     key={idx}
-                    whileHover={{ y: -5 }}
-                    className="p-8 rounded-2xl border border-gray-100 bg-[#F7F9FC] shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between min-h-[220px]"
+                    className="p-8 rounded-2xl border border-gray-100 bg-[#F7F9FC] flex flex-col justify-between min-h-[220px]"
                   >
                     <div className="space-y-4">
-                      <div className="w-10 h-10 rounded-lg bg-[#081B33] text-[#D4AF37] flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
                         <Icon className="w-5 h-5 stroke-[1.5]" />
                       </div>
-                      <h3 className="text-base font-bold font-display text-[#081B33]">
+                      <h3 className="text-base font-bold font-display text-[#081B33] uppercase tracking-wider">
                         {srv.title}
                       </h3>
-                      <p className="text-xs text-gray-600 font-light leading-relaxed">
+                      <p className="text-xs text-gray-500 font-light leading-relaxed">
                         {srv.desc}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -137,25 +208,25 @@ export default function HousekeepingServicePage() {
         </section>
 
         {/* Operational Process Timeline */}
-        <section className="py-24 md:py-32 bg-[#F7F9FC] text-[#081B33] border-t border-gray-100">
+        <section className="py-24 bg-[#F7F9FC] border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-                Hygiene SOP
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                Workflow
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-[#081B33]">
-                Cleaning Schedule Roadmap.
+              <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight text-[#081B33] uppercase">
+                Quality Maintenance Loop
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               {housekeepingProcess.map((step, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative space-y-4">
-                  <div className="absolute top-4 right-4 text-4xl font-extrabold text-[#D4AF37]/15">
+                <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 relative space-y-4 shadow-sm">
+                  <div className="absolute top-4 right-4 text-3xl font-extrabold text-[#D4AF37]/15">
                     0{idx + 1}
                   </div>
-                  <h3 className="text-sm font-bold font-display text-[#081B33] pr-8">
+                  <h3 className="text-sm font-bold font-display text-[#081B33] uppercase tracking-wider pr-8">
                     {step.title}
                   </h3>
                   <p className="text-[11px] text-gray-500 font-light leading-relaxed">
@@ -167,61 +238,86 @@ export default function HousekeepingServicePage() {
           </div>
         </section>
 
-        {/* Sector-Specific Quote Builder Form */}
-        <section className="py-24 md:py-32 bg-[#081B33] text-white">
+        {/* Inquiry Builder Form */}
+        <section className="py-24 bg-[#081B33] text-white">
           <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
             
             {/* Info Column */}
             <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
               <div className="space-y-6">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
-                  Instant Bid Request
+                  Inquiry Desk
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight text-white leading-tight">
-                  Request Housekeeping Proposal.
+                <h2 className="text-3xl font-bold font-display tracking-tight text-white uppercase leading-none">
+                  Request Housekeeping proposal.
                 </h2>
                 <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
-                  Enter your facility details below. Our corporate housekeeping manager will calculate chemical inventory requirements and dispatch a quote.
+                  Enter your property size and desired cleaning intervals. Our corporate manager will coordinate a walkthrough check.
                 </p>
               </div>
 
               <div className="p-6 rounded-2xl border border-white/5 bg-[#1E3A5F]/15 text-xs text-gray-300 leading-relaxed">
-                <strong>Safety First:</strong> We comply with all commercial health regulations, using non-toxic solutions and keeping MSDS binders on site.
+                <strong>Standard Consumables:</strong> We align dilution ratios and chemical selections to protect stone surfaces and wood laminates.
               </div>
             </div>
 
             {/* Form Column */}
-            <div className="lg:col-span-7 glass-card-gold p-8 md:p-10 rounded-2xl border border-white/5 shadow-2xl bg-[#1E3A5F]/10">
-              {isSubmitted && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center gap-3 text-green-300 text-xs font-semibold"
-                >
-                  <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-                  <span>Housekeeping proposal request received. We will contact you shortly!</span>
-                </motion.div>
-              )}
+            <div className="lg:col-span-7 p-8 md:p-10 rounded-2xl border border-white/5 bg-[#1E3A5F]/5 shadow-2xl">
+              
+              <AnimatePresence mode="wait">
+                {isSubmitted && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/35 flex items-center gap-3 text-green-400 text-xs"
+                  >
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                    <span>Housekeeping request submitted. Our coordinator will contact your representative.</span>
+                  </motion.div>
+                )}
+
+                {submitError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/35 flex items-center gap-3 text-red-400 text-xs"
+                  >
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <span>{submitError}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {/* Honeypot */}
+                <div className="hidden" aria-hidden="true">
+                  <input type="text" tabIndex={-1} {...register("botField")} />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Company / Organization *</label>
+                    <label htmlFor="organization" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Company / Organization *</label>
                     <input
+                      id="organization"
                       type="text"
+                      aria-invalid={errors.organization ? "true" : "false"}
+                      {...register("organization", { required: "Organization is required" })}
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                       placeholder="Company"
-                      {...register("organization", { required: "Organization name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     />
                     {errors.organization && <p className="text-[10px] text-red-400 mt-1">{errors.organization.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contact Person Name *</label>
+                    <label htmlFor="contactName" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Contact Person Name *</label>
                     <input
+                      id="contactName"
                       type="text"
-                      placeholder="Name"
+                      aria-invalid={errors.contactName ? "true" : "false"}
                       {...register("contactName", { required: "Contact name is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="Name"
                     />
                     {errors.contactName && <p className="text-[10px] text-red-400 mt-1">{errors.contactName.message}</p>}
                   </div>
@@ -229,81 +325,77 @@ export default function HousekeepingServicePage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Email *</label>
+                    <label htmlFor="email" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Email *</label>
                     <input
+                      id="email"
                       type="email"
-                      placeholder="name@company.com"
+                      aria-invalid={errors.email ? "true" : "false"}
                       {...register("email", { required: "Email is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="name@company.com"
                     />
                     {errors.email && <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Phone *</label>
+                    <label htmlFor="phone" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Phone *</label>
                     <input
+                      id="phone"
                       type="tel"
-                      placeholder="9002570891"
+                      aria-invalid={errors.phone ? "true" : "false"}
                       {...register("phone", { required: "Phone is required" })}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="e.g. 9002570891"
                     />
                     {errors.phone && <p className="text-[10px] text-red-400 mt-1">{errors.phone.message}</p>}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Estimated Sq. Footage</label>
+                    <label htmlFor="facilitySize" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Facility Size (Sqft)</label>
                     <input
+                      id="facilitySize"
                       type="text"
-                      placeholder="E.g., 25,000 sqft"
-                      {...register("facilitySize")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      {...register("facilitySize", { required: "Size is required" })}
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      placeholder="e.g. 15,000 sqft"
                     />
+                    {errors.facilitySize && <p className="text-[10px] text-red-400 mt-1">{errors.facilitySize.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Cleaning Frequency</label>
+                    <label htmlFor="frequency" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Cleaning Frequency</label>
                     <select
+                      id="frequency"
                       {...register("frequency")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
+                      className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
                     >
-                      <option value="Daily Routine">Daily Routine cleaning</option>
+                      <option value="Daily Routine">Daily Routine Cleaning</option>
                       <option value="Alternate Days">Alternate Days</option>
-                      <option value="Deep Clean Project">Deep Clean (One-Off)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Facility Type</label>
-                    <select
-                      {...register("propertyType")}
-                      className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white"
-                    >
-                      <option value="Office Corporate">Office / Corporate</option>
-                      <option value="Healthcare Hospital">Hospital / Clinic</option>
-                      <option value="Retail Mall">Shopping Mall</option>
-                      <option value="Factory Floor">Manufacturing / Industrial</option>
+                      <option value="Deep Clean Project">Deep Clean Project</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Special Site Requirements</label>
+                  <label htmlFor="notes" className="block text-[10px] font-bold uppercase text-gray-400 mb-1">Site Details / Notes</label>
                   <textarea
+                    id="notes"
                     rows={3}
-                    placeholder="Tell us about facade heights, carpet areas, marble tiles, or desired shift timing..."
+                    placeholder="Briefly describe floor materials, high-rise facade windows details..."
                     {...register("notes")}
-                    className="w-full bg-[#081B33]/60 border border-white/10 rounded-lg p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
+                    className="w-full bg-[#081B33]/60 border border-white/10 rounded p-3 text-xs focus:outline-none focus:border-[#D4AF37] text-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs tracking-wider uppercase rounded-lg shadow-lg shadow-[#D4AF37]/20 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full py-4 bg-[#D4AF37] hover:bg-[#AA771C] text-[#081B33] font-bold text-xs uppercase tracking-widest rounded shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Submitting Proposal Request...</span>
+                      <span>Processing Request...</span>
                     </>
                   ) : (
                     <span>Submit Proposal Request</span>
@@ -315,16 +407,16 @@ export default function HousekeepingServicePage() {
         </section>
 
         {/* FAQs Accordion */}
-        <section className="py-24 md:py-32 bg-[#F7F9FC] text-[#081B33]">
+        <section className="py-24 bg-[#F7F9FC] text-[#081B33]">
           <div className="max-w-3xl mx-auto px-6 md:px-8">
-            <div className="text-center space-y-6 mb-16">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37] block">
-                Housekeeping FAQ
+            <div className="text-center space-y-4 mb-16">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+                FAQ
               </span>
-              <h2 className="text-3xl font-bold font-display tracking-tight text-[#081B33]">
-                Commercial Cleaning Inquiries.
+              <h2 className="text-2xl sm:text-3xl font-bold font-display text-[#081B33] uppercase">
+                Hygiene Questions
               </h2>
-              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
+              <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
             </div>
 
             <div className="space-y-4">
@@ -336,7 +428,7 @@ export default function HousekeepingServicePage() {
                       onClick={() => setOpenFaq(isOpen ? null : idx)}
                       className="w-full py-5 px-6 md:px-8 flex items-center justify-between text-left hover:bg-gray-50/50 transition-colors cursor-pointer"
                     >
-                      <span className="text-sm md:text-base font-bold font-display text-[#081B33]">{faq.q}</span>
+                      <span className="text-sm md:text-base font-bold font-display text-[#081B33] uppercase tracking-wider">{faq.q}</span>
                       <div className={`w-8 h-8 rounded-lg bg-[#081B33]/5 text-[#D4AF37] flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? "rotate-180 bg-[#081B33] text-white" : ""}`}>
                         {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                       </div>
@@ -366,8 +458,6 @@ export default function HousekeepingServicePage() {
       </main>
 
       <Footer />
-
-      <QuoteModal isOpen={isQuoteOpen} onClose={() => setIsQuoteOpen(false)} />
     </>
   );
 }

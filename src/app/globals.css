@@ -3,7 +3,8 @@
 @theme {
   --color-primary: #081B33;
   --color-secondary: #D4AF37;
-  --color-accent: #1E3A5F;
+  --color-accent: #C41E3A;
+  --color-accent-blue: #1E3A5F;
   --color-light-section: #F7F9FC;
   --color-text-dark: #111827;
 
@@ -35,7 +36,8 @@
 :root {
   --primary: #081B33;
   --secondary: #D4AF37;
-  --accent: #1E3A5F;
+  --accent: #C41E3A;
+  --accent-blue: #1E3A5F;
   --background: #FFFFFF;
   --foreground: #111827;
   --light-section: #F7F9FC;

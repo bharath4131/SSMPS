@@ -1,142 +1,155 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
-import { FileText, ClipboardList, Send, ShieldAlert, Activity, HeartHandshake } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ClipboardList, ZoomIn, FileCheck, ShieldCheck, Award, HeartHandshake } from "lucide-react";
 
 export default function ProcessTimeline() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Track scroll position of the timeline container
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"],
-  });
-
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
-  });
+  const shouldReduceMotion = useReducedMotion();
 
   const steps = [
     {
+      num: "01",
+      title: "Discuss",
       icon: ClipboardList,
-      title: "1. Corporate Consultation",
-      desc: "Our Hyderabad managers sit with your leadership to audit current operations, assess risk levels, and define housekeeping frequencies.",
+      desc: "Review your specific security, housekeeping, and facility objectives.",
     },
     {
-      icon: FileText,
-      title: "2. Site Inspection",
-      desc: "We perform a thorough site walkthrough to identify vulnerabilities, measure square footage, and optimize guard posts/patrol loops.",
+      num: "02",
+      title: "Assess",
+      icon: ZoomIn,
+      desc: "Perform a thorough walkthrough of boundaries, layout, and zones.",
     },
     {
-      icon: Send,
-      title: "3. Strategic Proposal",
-      desc: "We issue a granular commercial bid specifying guard schedules, cleaning chemicals compliance, and manpower billing breakdowns.",
+      num: "03",
+      title: "Plan",
+      icon: FileCheck,
+      desc: "Design detailed rosters, shift cycles, and post instructions.",
     },
     {
-      icon: ShieldAlert,
-      title: "4. Rapid Deployment",
-      desc: "Following contract signing, we mobilize the team. All staff receive site-specific training and verify post instructions.",
+      num: "04",
+      title: "Deploy",
+      icon: ShieldCheck,
+      desc: "Mobilize the vetted team, verify gear, and establish reporting logs.",
     },
     {
-      icon: Activity,
-      title: "5. Real-Time Monitoring",
-      desc: "Our control center logs guard patrols. Field officers perform surprise midnight audits, and housekeeping managers review checklists.",
+      num: "05",
+      title: "Supervise",
+      icon: Award,
+      desc: "Conduct supervisory visits and duty checks to maintain discipline.",
     },
     {
+      num: "06",
+      title: "Support",
       icon: HeartHandshake,
-      title: "6. Continuous Support",
-      desc: "We assign a dedicated account coordinator. Monthly SLA reviews and formal feedback loops guarantee sustained quality.",
+      desc: "Assign a coordinator for roster queries and rapid replacements.",
     },
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-[#081B33] text-white overflow-hidden">
+    <section className="py-24 md:py-36 bg-white text-[#081B33] overflow-hidden border-t border-[#081B33]/5">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Header Block */}
-        <div className="text-center max-w-3xl mx-auto space-y-6 mb-20 md:mb-28">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
-            Operational Roadmap
+        <div className="space-y-4 mb-20 md:mb-28 text-center max-w-3xl mx-auto">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#C41E3A] block">
+            Operational Path
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold font-display tracking-tight">
-            How We Guarantee Flawless Execution.
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight text-[#081B33] uppercase">
+            From requirement <br />
+            to reliable delivery.
           </h2>
-          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto" />
-          <p className="text-xs md:text-sm text-gray-300 font-light leading-relaxed">
-            From initial site audit to ongoing midnight audits, SSMPS follows a systematic approach to ensure safety and hygiene.
-          </p>
+          <div className="h-[2px] w-20 bg-[#D4AF37] mx-auto mt-4" />
         </div>
 
-        {/* Timeline Container */}
-        <div ref={containerRef} className="relative max-w-4xl mx-auto">
-          {/* Vertical Track Line */}
-          <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-[2px] bg-white/10 -translate-x-[1px] pointer-events-none" />
-          
-          {/* Animated Gold Fill Line */}
-          <motion.div
-            style={{ scaleY }}
-            className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#D4AF37] to-[#AA771C] origin-top -translate-x-[1px] pointer-events-none shadow-[0_0_10px_rgba(212,175,55,0.4)]"
-          />
+        {/* Desktop View: Immersive Horizontal Process */}
+        <div className="hidden lg:block relative py-12">
+          {/* Progress Accent Line */}
+          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-gray-100 -translate-y-1/2 z-0" />
+          {!shouldReduceMotion && (
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute top-1/2 left-0 right-0 h-[2px] bg-[#D4AF37] origin-left -translate-y-1/2 z-10"
+            />
+          )}
 
-          {/* Steps Grid */}
-          <div className="space-y-12 lg:space-y-16">
+          <div className="grid grid-cols-6 gap-6 relative z-20">
             {steps.map((step, idx) => {
               const Icon = step.icon;
-              const isEven = idx % 2 === 0;
-
               return (
-                <div
+                <motion.div
                   key={idx}
-                  className={`flex flex-col lg:flex-row items-start ${
-                    isEven ? "lg:flex-row-reverse" : ""
-                  } relative`}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
+                  className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center text-center space-y-4"
                 >
-                  {/* Space Holder for desktop */}
-                  <div className="hidden lg:block lg:w-1/2" />
-
-                  {/* Bullet Indicator */}
-                  <div className="absolute left-6 lg:left-1/2 w-10 h-10 -translate-x-5 flex items-center justify-center z-10">
-                    <motion.div
-                      whileInView={{ scale: [0.8, 1.1, 1] }}
-                      viewport={{ once: true }}
-                      className="w-10 h-10 rounded-xl bg-[#081B33] border-2 border-[#D4AF37] flex items-center justify-center text-[#D4AF37] shadow-lg"
-                    >
-                      <Icon className="w-5 h-5 stroke-[1.5]" />
-                    </motion.div>
+                  <div className="w-10 h-10 rounded bg-[#081B33] flex items-center justify-center text-[#D4AF37] shadow-md">
+                    <Icon className="w-4.5 h-4.5" />
                   </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider block">
+                      Step {step.num}
+                    </span>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#081B33] font-display">
+                      {step.title}
+                    </h3>
+                  </div>
+                  <p className="text-[10px] text-gray-500 font-light leading-relaxed">
+                    {step.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
 
-                  {/* Timeline Card */}
-                  <div className="w-full lg:w-1/2 pl-16 lg:pl-0 lg:px-12">
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ duration: 0.5, delay: idx * 0.05 }}
-                      className="p-6 md:p-8 rounded-2xl border border-white/5 bg-[#1E3A5F]/10 hover:border-[#D4AF37]/20 transition-all duration-300 relative shadow-xl"
-                    >
-                      {/* Side pointer indicator for desktop */}
-                      <div
-                        className={`hidden lg:block absolute top-7 w-3 h-3 bg-[#1E3A5F]/10 border-t border-r border-white/5 rotate-45 ${
-                          isEven
-                            ? "-right-1.5 border-l-0 border-b-0 rotate-[45deg] border-[#D4AF37]/20"
-                            : "-left-1.5 border-r-0 border-t-0 rotate-[225deg] border-[#D4AF37]/20"
-                        }`}
-                        style={{
-                          backgroundColor: "#0d223d",
-                        }}
-                      />
+        {/* Mobile View: Vertical Roadmap */}
+        <div className="lg:hidden relative pl-8 py-4">
+          {/* Vertical Progress Line */}
+          <div className="absolute top-0 bottom-0 left-[18px] w-[1px] bg-gray-100 z-0" />
+          {!shouldReduceMotion && (
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute top-0 bottom-0 left-[18px] w-[2px] bg-[#D4AF37] origin-top z-10"
+            />
+          )}
 
-                      <h3 className="text-lg font-bold font-display text-white mb-2">
+          <div className="space-y-10">
+            {steps.map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.08 }}
+                  className="flex gap-4 items-start relative z-20"
+                >
+                  <div className="w-9 h-9 rounded bg-[#081B33] flex items-center justify-center text-[#D4AF37] shadow flex-shrink-0">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest block">
+                        Step {step.num}
+                      </span>
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-[#081B33] font-display">
                         {step.title}
                       </h3>
-                      <p className="text-xs text-gray-300 font-light leading-relaxed">
-                        {step.desc}
-                      </p>
-                    </motion.div>
+                    </div>
+                    <p className="text-xs text-gray-500 font-light leading-relaxed">
+                      {step.desc}
+                    </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>

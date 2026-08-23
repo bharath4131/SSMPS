@@ -19,11 +19,10 @@ export async function POST(request: Request) {
       name,
       email,
       phone,
-      organization,
-      contactName,
-      subject,
+      company,
+      service,
+      location,
       message,
-      notes,
       inquirySource,
       // Honeypot field for bot spam prevention
       botField,
@@ -31,21 +30,22 @@ export async function POST(request: Request) {
 
     // 2. Automated Spam Check (Honeypot detection)
     if (botField) {
-      console.warn("Spam detected: botField honey-pot was populated.");
+      console.warn("Spam detected: botField honeypot was populated.");
       return NextResponse.json(
         { success: false, error: "Automated submission rejected." },
         { status: 400 }
       );
     }
 
-    // 3. Normalize Name (could come from contact form 'name' or proposal form 'fullName'/'contactName')
-    const finalName = name || contactName || "Inquirer";
+    const finalName = name ? String(name).trim() : "";
     const finalEmail = email ? String(email).trim() : "";
     const finalPhone = phone ? String(phone).trim() : "";
-    const finalSubject = subject ? String(subject).trim() : `Bespoke Inquiry from ${inquirySource || "Website"}`;
-    const finalMessage = message || notes || "";
+    const finalCompany = company ? String(company).trim() : "";
+    const finalService = service ? String(service).trim() : "Unspecified Services";
+    const finalLocation = location ? String(location).trim() : "Not Specified";
+    const finalMessage = message ? String(message).trim() : "";
 
-    // 4. Validate Required Fields
+    // 3. Validate Required Fields
     if (!finalName || !finalEmail || !finalPhone) {
       return NextResponse.json(
         { success: false, error: "Name, email, and phone number are required." },
@@ -53,8 +53,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Enforce Input Length Limits (Security against buffer overruns)
-    if (String(finalName).length > 100) {
+    // 4. Enforce Input Length Limits (Security check)
+    if (finalName.length > 100) {
       return NextResponse.json({ success: false, error: "Name must not exceed 100 characters." }, { status: 400 });
     }
     if (finalEmail.length > 150) {
@@ -63,17 +63,17 @@ export async function POST(request: Request) {
     if (finalPhone.length > 20) {
       return NextResponse.json({ success: false, error: "Phone number must not exceed 20 characters." }, { status: 400 });
     }
-    if (organization && String(organization).length > 150) {
-      return NextResponse.json({ success: false, error: "Organization name must not exceed 150 characters." }, { status: 400 });
+    if (finalCompany.length > 150) {
+      return NextResponse.json({ success: false, error: "Company name must not exceed 150 characters." }, { status: 400 });
     }
-    if (String(finalSubject).length > 200) {
-      return NextResponse.json({ success: false, error: "Subject must not exceed 200 characters." }, { status: 400 });
+    if (finalLocation.length > 150) {
+      return NextResponse.json({ success: false, error: "Location must not exceed 150 characters." }, { status: 400 });
     }
-    if (String(finalMessage).length > 3000) {
+    if (finalMessage.length > 3000) {
       return NextResponse.json({ success: false, error: "Message must not exceed 3000 characters." }, { status: 400 });
     }
 
-    // 6. Strict Format Validation
+    // 5. Format Validation
     if (!EMAIL_REGEX.test(finalEmail)) {
       return NextResponse.json(
         { success: false, error: "Invalid email format." },
@@ -81,7 +81,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Basic phone pattern check (must contain only numbers, spaces, plus signs, dashes, or parens)
     const phoneCleaned = finalPhone.replace(/[\s\+\-\(\)]/g, "");
     if (!/^\d{7,15}$/.test(phoneCleaned)) {
       return NextResponse.json(
@@ -90,52 +89,120 @@ export async function POST(request: Request) {
       );
     }
 
-    // 7. Sanitize HTML/Script tags to prevent XSS injection
+    // 6. Sanitize HTML/Script tags to prevent XSS injection
     const sanitizeHTML = (str: string) => str.replace(/<[^>]*>/g, "");
-    const cleanName = sanitizeHTML(String(finalName));
+    const cleanName = sanitizeHTML(finalName);
     const cleanEmail = sanitizeHTML(finalEmail);
     const cleanPhone = sanitizeHTML(finalPhone);
-    const cleanSubject = sanitizeHTML(finalSubject);
-    const cleanMessage = sanitizeHTML(String(finalMessage));
-    const cleanOrg = organization ? sanitizeHTML(String(organization)) : "";
+    const cleanCompany = sanitizeHTML(finalCompany);
+    const cleanService = sanitizeHTML(finalService);
+    const cleanLocation = sanitizeHTML(finalLocation);
+    const cleanMessage = sanitizeHTML(finalMessage);
 
-    // 8. Check Backend Configuration (Mailer credentials check)
-    // If SMTP or API Key environment variables are missing, return a 503 error
     const apiKey = process.env.RESEND_API_KEY;
-    const smtpHost = process.env.SMTP_HOST;
-    const recipient = process.env.SEND_INQUIRIES_TO;
+    const recipientEmail = process.env.EMAIL_TO || "ssmps1991@gmail.com";
+    const isDev = process.env.NODE_ENV !== "production";
 
-    if (!apiKey && !smtpHost) {
-      // Log details in server console for local testing/development
+    // 7. Fallback behavior for Local Development
+    if (!apiKey) {
       console.log("-----------------------------------------");
-      console.log(`[DEVELOPMENT LOG] New Inquiry Received from ${inquirySource || "Direct"}`);
+      console.log(`[DEVELOPMENT INQUIRY LOG] Source: ${inquirySource || "Website Form"}`);
       console.log(`Name: ${cleanName}`);
       console.log(`Email: ${cleanEmail}`);
       console.log(`Phone: ${cleanPhone}`);
-      console.log(`Org: ${cleanOrg}`);
-      console.log(`Subject: ${cleanSubject}`);
-      console.log(`Message/Notes: ${cleanMessage}`);
+      console.log(`Company: ${cleanCompany}`);
+      console.log(`Service: ${cleanService}`);
+      console.log(`Location: ${cleanLocation}`);
+      console.log(`Message: ${cleanMessage}`);
       console.log("-----------------------------------------");
 
+      if (isDev) {
+        return NextResponse.json(
+          {
+            success: true,
+            message: "Development Mode: Inquiry logged to server console successfully.",
+            loggedLocally: true,
+          },
+          { status: 200 }
+        );
+      }
+
+      // In Production (Vercel) but missing credentials -> Return actual failure error
       return NextResponse.json(
         {
           success: false,
-          error: "Inquiry delivery service is not configured on the server. Please define RESEND_API_KEY or SMTP_HOST environment variables.",
-          devNote: "Submission printed to server console logs.",
+          error: "Inquiry delivery service is not configured on this environment. Please specify the RESEND_API_KEY environment variable in your Vercel Dashboard.",
         },
         { status: 503 }
       );
     }
 
-    // 9. Placeholder for real mailer dispatch
-    // In production, when keys are defined, Resend or Nodemailer will dispatch here:
-    /*
-    if (apiKey) {
-       // dispatch via Resend SDK
-    } else if (smtpHost) {
-       // dispatch via Nodemailer SMTP transport
+    // 8. Live Resend Integration (Native Fetch)
+    const emailPayload = {
+      from: "SSMPS Website <onboarding@resend.dev>",
+      to: recipientEmail,
+      subject: `SSMPS Corporate Proposal Inquiry: ${cleanService}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+          <h2 style="color: #081B33; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; text-transform: uppercase;">New SSMPS Proposal Request</h2>
+          <p>A new B2B inquiry was submitted through the SSMPS portal:</p>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold; width: 180px;">Contact Name:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${cleanName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Company:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${cleanCompany || "Not Specified"}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Email Address:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="mailto:${cleanEmail}">${cleanEmail}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Phone Number:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;"><a href="tel:${cleanPhone}">${cleanPhone}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Selected Service:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; color: #C41E3A; font-weight: bold;">${cleanService}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Deployment Location:</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${cleanLocation}</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 4px; border-left: 4px solid #D4AF37;">
+            <strong style="color: #081B33; display: block; margin-bottom: 5px;">Requirements / Notes:</strong>
+            <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #555; white-space: pre-wrap;">${cleanMessage || "No detailed notes provided."}</p>
+          </div>
+          
+          <div style="margin-top: 30px; font-size: 11px; color: #888; text-align: center; border-top: 1px solid #eaeaea; padding-top: 15px;">
+            This inquiry was automatically dispatched by the SSMPS portal.
+          </div>
+        </div>
+      `,
+    };
+
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(emailPayload),
+    });
+
+    const resData = await res.json();
+
+    if (!res.ok) {
+      console.error("Resend API rejected transmission:", resData);
+      return NextResponse.json(
+        { success: false, error: "Failed to dispatch email via Resend API." },
+        { status: 502 }
+      );
     }
-    */
 
     return NextResponse.json(
       { success: true, message: "Inquiry successfully dispatched to SSMPS administration." },
