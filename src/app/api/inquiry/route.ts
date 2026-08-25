@@ -128,11 +128,15 @@ export async function POST(request: Request) {
         );
       }
 
-      // In Production but missing credentials -> Return generic failure error
+      // In Production but missing credentials -> Return specific failure error for debugging
+      const missing = [];
+      if (!apiKey) missing.push("RESEND_API_KEY");
+      if (!recipientEmail) missing.push("EMAIL_TO");
+
       return NextResponse.json(
         {
           success: false,
-          error: "We're unable to process your inquiry right now. Please try again shortly or contact us directly.",
+          error: `Diagnostic: The Vercel server is missing the following environment variables: ${missing.join(", ")}. Please verify exact spelling and redeploy.`,
         },
         { status: 503 }
       );
