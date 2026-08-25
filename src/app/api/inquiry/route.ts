@@ -100,11 +100,12 @@ export async function POST(request: Request) {
     const cleanMessage = sanitizeHTML(finalMessage);
 
     const apiKey = process.env.RESEND_API_KEY;
-    const recipientEmail = process.env.EMAIL_TO || "ssmps1991@gmail.com";
+    const recipientEmail = process.env.EMAIL_TO;
+    const senderEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
     const isDev = process.env.NODE_ENV !== "production";
 
-    // 7. Fallback behavior for Local Development
-    if (!apiKey) {
+    // 7. Fallback behavior for Local Development or Missing Config
+    if (!apiKey || !recipientEmail) {
       console.log("-----------------------------------------");
       console.log(`[DEVELOPMENT INQUIRY LOG] Source: ${inquirySource || "Website Form"}`);
       console.log(`Name: ${cleanName}`);
@@ -120,18 +121,18 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             success: true,
-            message: "Development Mode: Inquiry logged to server console successfully.",
+            message: "Inquiry received for local testing.",
             loggedLocally: true,
           },
           { status: 200 }
         );
       }
 
-      // In Production (Vercel) but missing credentials -> Return actual failure error
+      // In Production but missing credentials -> Return generic failure error
       return NextResponse.json(
         {
           success: false,
-          error: "Inquiry delivery service is not configured on this environment. Please specify the RESEND_API_KEY environment variable in your Vercel Dashboard.",
+          error: "We're unable to process your inquiry right now. Please try again shortly or contact us directly.",
         },
         { status: 503 }
       );
@@ -139,7 +140,7 @@ export async function POST(request: Request) {
 
     // 8. Live Resend Integration (Native Fetch)
     const emailPayload = {
-      from: "SSMPS Website <onboarding@resend.dev>",
+      from: `SSMPS Website <${senderEmail}>`,
       to: recipientEmail,
       subject: `SSMPS Corporate Proposal Inquiry: ${cleanService}`,
       html: `
